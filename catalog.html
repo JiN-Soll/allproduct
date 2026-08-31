@@ -1,0 +1,151 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="(주)마스터 거래처용 상품 카탈로그" />
+  <title>마스터 유통 상품 카탈로그</title>
+  <style>
+    :root{
+      --bg:#f4f0e8;--panel:#fffdf9;--panel-2:#f8f3eb;--line:#dfd6c8;--line-2:#cdbfae;
+      --text:#202a35;--muted:#707985;--accent:#0e766f;--accent2:#c78732;--accent-soft:#e7f3f1;
+      --shadow:0 14px 34px rgba(54,44,31,.08);--shadow-sm:0 6px 18px rgba(54,44,31,.055);
+      --overlay:rgba(7,10,14,.68);
+    }
+    html[data-theme="dark"]{
+      --bg:#10151c;--panel:#19212c;--panel-2:#141b24;--line:#283547;--line-2:#384a62;
+      --text:#edf2f8;--muted:#9cabbf;--accent:#55d4ca;--accent2:#efb45f;--accent-soft:rgba(85,212,202,.12);
+      --shadow:0 16px 36px rgba(0,0,0,.32);--shadow-sm:0 8px 20px rgba(0,0,0,.22);--overlay:rgba(0,0,0,.78);
+    }
+    *{box-sizing:border-box} html{scroll-behavior:smooth}
+    body{margin:0;color:var(--text);background:radial-gradient(circle at 0 0,rgba(14,118,111,.08),transparent 24%),radial-gradient(circle at 100% 0,rgba(199,135,50,.08),transparent 19%),var(--bg);font-family:Pretendard,"Noto Sans KR","Apple SD Gothic Neo",system-ui,sans-serif;font-size:14px;line-height:1.55;transition:.22s ease}
+    button,input{font:inherit} button{cursor:pointer} a{color:inherit;text-decoration:none}
+    .topbar{position:sticky;top:0;z-index:60;background:color-mix(in srgb,var(--panel) 82%,transparent);backdrop-filter:blur(16px);border-bottom:1px solid var(--line)}
+    .topbar-inner{max-width:1780px;margin:auto;padding:14px 22px;display:flex;align-items:center;justify-content:space-between;gap:18px}
+    .brand{display:flex;align-items:center;gap:14px}.brand-dot{width:18px;height:18px;border-radius:50%;background:linear-gradient(135deg,var(--accent),var(--accent2));box-shadow:0 0 0 8px color-mix(in srgb,var(--accent) 15%,transparent)}
+    .brand h1{margin:0;font-size:28px;line-height:1.08;font-weight:900;letter-spacing:-.9px}.brand small{display:block;margin-top:5px;color:var(--muted);font-size:12px;font-weight:700}
+    .top-actions{display:flex;align-items:center;gap:10px}.theme-btn,.refresh-btn{height:44px;border:1px solid var(--line-2);background:var(--panel);color:var(--text);border-radius:999px;padding:0 14px;font-weight:900;box-shadow:var(--shadow-sm)}
+    .summary{display:flex;gap:8px}.sum{min-width:72px;padding:9px 12px;border:1px solid var(--line);background:var(--panel);border-radius:14px;text-align:right;box-shadow:var(--shadow-sm)}.sum strong{display:block;font-size:22px;line-height:1;font-weight:900}.sum span{font-size:10px;color:var(--muted)}
+
+    .hero-wrap{max-width:1780px;margin:auto;padding:18px 22px 0}.hero{border:1px solid var(--line);border-radius:24px;background:linear-gradient(135deg,color-mix(in srgb,var(--accent-soft) 74%,var(--panel)),var(--panel));padding:22px 24px;box-shadow:var(--shadow)}
+    .hero p{margin:0 0 8px;font-size:14px}.hero p:last-child{margin:0}.hero strong{color:var(--accent)}
+    .notice-row{margin-top:14px;display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}.notice{font-size:12px;color:var(--muted);font-weight:800}.contact-actions{display:flex;gap:8px;flex-wrap:wrap}.contact-btn{border:1px solid var(--line-2);background:var(--panel);border-radius:999px;padding:8px 12px;font-size:12px;font-weight:900}.contact-btn:hover{border-color:var(--accent);color:var(--accent)}
+
+    .workspace{max-width:1780px;margin:auto;padding:20px 22px 44px;display:grid;grid-template-columns:220px minmax(0,1fr);gap:20px;align-items:start}
+    .sidebar{position:sticky;top:92px;max-height:calc(100vh - 116px);overflow:auto;background:var(--panel);border:1px solid var(--line);border-radius:22px;padding:12px;box-shadow:var(--shadow)}
+    .sidebar-title{padding:4px 8px 10px;font-size:11px;color:var(--muted);font-weight:900;letter-spacing:.07em}.section-list{display:flex;flex-direction:column;gap:6px}
+    .section-btn{width:100%;border:1px solid transparent;background:transparent;border-radius:14px;padding:11px 12px;display:flex;justify-content:space-between;gap:8px;color:var(--text);font-weight:900;text-align:left}.section-btn:hover{background:var(--panel-2);border-color:var(--line)}.section-btn.active{color:#fff;background:linear-gradient(135deg,var(--accent),color-mix(in srgb,var(--accent2) 55%,var(--accent)));box-shadow:0 10px 24px rgba(14,118,111,.18)}.section-btn .count{font-size:10px;opacity:.76}
+
+    .main{min-width:0}.toolbar{position:sticky;top:92px;z-index:40;background:var(--panel);border:1px solid var(--line);border-radius:22px;padding:12px;display:flex;align-items:center;gap:12px;box-shadow:var(--shadow)}
+    .search-wrap{position:relative;flex:1;min-width:180px}.search-wrap svg{position:absolute;left:15px;top:50%;transform:translateY(-50%);width:18px;height:18px;color:#8a95a4}.search{width:100%;height:46px;border:1px solid var(--line);background:var(--panel-2);border-radius:15px;color:var(--text);padding:0 14px 0 43px;outline:none}.search:focus{border-color:var(--accent);box-shadow:0 0 0 3px color-mix(in srgb,var(--accent) 16%,transparent)}
+    .sorts{display:flex;gap:7px;flex-wrap:wrap}.sort-btn{height:40px;border:1px solid var(--line-2);background:var(--panel);border-radius:999px;padding:0 13px;color:var(--muted);font-size:12px;font-weight:900}.sort-btn.active{border-color:transparent;background:var(--accent-soft);color:var(--accent)}
+    .section-head{display:flex;justify-content:space-between;align-items:end;gap:12px;padding:18px 4px 12px}.section-head h2{margin:0;font-size:23px;letter-spacing:-.5px}.section-meta{font-size:11px;color:var(--muted);text-align:right}.section-meta strong{color:var(--text)}
+
+    .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(245px,1fr));gap:16px;align-items:start}.card{min-width:0;background:var(--panel);border:1px solid var(--line);border-radius:24px;overflow:hidden;box-shadow:var(--shadow-sm);transition:.16s ease}.card:hover{transform:translateY(-3px);border-color:color-mix(in srgb,var(--accent) 32%,var(--line));box-shadow:var(--shadow)}
+    .image-box{position:relative;aspect-ratio:1.18/1;background:var(--panel-2);overflow:hidden;cursor:zoom-in}.image-box img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .18s ease}.card:hover .image-box img{transform:scale(1.02)}.no-image{width:100%;height:100%;display:grid;place-items:center;color:var(--muted);font-size:13px;font-weight:900;background:repeating-linear-gradient(135deg,var(--panel-2) 0 12px,color-mix(in srgb,var(--line) 35%,var(--panel-2)) 12px 24px)}
+    .image-footer{position:absolute;left:0;right:0;bottom:0;padding:9px 11px;background:linear-gradient(180deg,transparent,rgba(0,0,0,.57));display:flex;justify-content:flex-start;align-items:flex-end;pointer-events:none}.warehouse-badge{display:inline-flex;align-items:center;gap:7px;padding:7px 11px;border-radius:999px;background:rgba(255,255,255,.92);color:#304255;font-size:12px;font-weight:900;box-shadow:0 4px 12px rgba(0,0,0,.07)}.warehouse-badge:before{content:"";width:8px;height:8px;border-radius:50%;background:var(--accent)}
+    .image-guide{position:absolute;right:10px;top:10px;width:34px;height:34px;border:1px solid rgba(255,255,255,.75);border-radius:50%;background:rgba(255,255,255,.9);display:grid;place-items:center;color:#344256;font-weight:900;z-index:2;cursor:help}
+    .card-body{padding:14px;display:flex;flex-direction:column;gap:10px}.name-box{border:1px solid var(--line);background:var(--panel-2);border-radius:16px;padding:11px 12px}.product-name{margin:0;font-size:18px;line-height:1.38;font-weight:900;letter-spacing:-.4px}
+    .chips{display:flex;gap:7px;flex-wrap:wrap}.chip{display:inline-flex;align-items:center;padding:5px 9px;border:1px solid var(--line);border-radius:999px;background:var(--panel-2);font-size:11px;font-weight:900;color:var(--muted)}.chip.primary{background:var(--accent-soft);color:var(--accent);border-color:color-mix(in srgb,var(--accent) 22%,var(--line))}
+    .description-box{border:1px solid var(--line);border-radius:17px;background:var(--panel-2);padding:12px 13px}.description-label{font-size:11px;color:var(--muted);font-weight:900;margin-bottom:7px;letter-spacing:.04em}.description{margin:0;font-size:15px;line-height:1.66;white-space:pre-wrap;word-break:keep-all;overflow-wrap:anywhere}.description.empty{color:var(--muted)}
+    .card-foot{display:flex;justify-content:space-between;align-items:center;gap:10px;padding-top:2px}.inquiry{font-size:15px;color:var(--accent);font-weight:900}.deadline{font-size:11px;color:var(--muted);text-align:right}
+
+    .floating-kakao{position:fixed;left:18px;bottom:18px;z-index:80;display:flex;align-items:center;gap:10px;padding:12px 15px;border-radius:18px;background:linear-gradient(135deg,var(--accent),color-mix(in srgb,var(--accent2) 58%,var(--accent)));color:#fff;box-shadow:0 16px 34px rgba(14,118,111,.3);font-weight:900}.floating-kakao span{display:block}.floating-kakao small{display:block;font-size:10px;opacity:.82;font-weight:700}.floating-kakao:hover{transform:translateY(-2px)}
+
+    .state{border:1px dashed var(--line-2);background:var(--panel);border-radius:22px;padding:50px 20px;text-align:center;color:var(--muted)}.state strong{display:block;color:var(--text);font-size:17px;margin-bottom:7px}.state code{display:inline-block;margin-top:10px;padding:5px 8px;background:var(--panel-2);border:1px solid var(--line);border-radius:8px;color:var(--accent)}
+    .footer{max-width:1780px;margin:auto;padding:0 22px 34px;text-align:center;color:var(--muted);font-size:11px}
+    .modal{position:fixed;inset:0;z-index:100;display:none;align-items:center;justify-content:center;padding:20px;background:var(--overlay)}.modal.show{display:flex}.modal-card{width:min(100%,960px);max-height:90vh;overflow:auto;background:var(--panel);border:1px solid var(--line);border-radius:22px;box-shadow:0 24px 60px rgba(0,0,0,.3)}.modal-head{padding:16px 18px 0;display:flex;justify-content:space-between;gap:12px;align-items:flex-start}.modal-title{font-size:18px;font-weight:900}.modal-close{width:38px;height:38px;border:1px solid var(--line);border-radius:50%;background:var(--panel-2);color:var(--text)}.modal-body{padding:14px 18px 18px}.modal-body img{width:100%;height:auto;border-radius:16px;display:block}.help-box{font-size:13px;color:var(--muted);line-height:1.7}.help-box b{color:var(--text)}
+
+    @media(max-width:1080px){.topbar-inner,.hero-wrap,.workspace,.footer{padding-left:14px;padding-right:14px}.workspace{display:block}.sidebar{position:relative;top:auto;max-height:none;margin-bottom:12px}.section-list{flex-direction:row;overflow-x:auto}.section-btn{flex:0 0 auto;width:auto}.toolbar{top:75px;flex-direction:column;align-items:stretch}.sorts{overflow-x:auto;flex-wrap:nowrap}.floating-kakao{left:12px;bottom:12px}}
+    @media(max-width:720px){.brand h1{font-size:20px}.brand small{display:none}.refresh-btn{display:none}.summary .sum:nth-child(2){display:none}.topbar-inner{padding-top:11px;padding-bottom:11px}.theme-btn{height:40px;padding:0 11px}.hero{padding:18px 16px}.grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}.product-name{font-size:15px}.description{font-size:13px}.card-body{padding:10px}.warehouse-badge{font-size:10px;padding:5px 8px}.floating-kakao span{display:none}}
+    @media(max-width:470px){.grid{grid-template-columns:1fr}.product-name{font-size:18px}.description{font-size:14px}.summary{display:none}}
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="topbar-inner">
+      <div class="brand"><span class="brand-dot"></span><div><h1>마스터 유통 상품 카탈로그</h1><small id="syncText">Google 스프레드시트 연결 대기 중</small></div></div>
+      <div class="top-actions">
+        <button class="refresh-btn" id="refreshBtn" type="button">↻ 새로고침</button>
+        <button class="theme-btn" id="themeBtn" type="button">🌙 다크모드 OFF</button>
+        <div class="summary"><div class="sum"><strong id="totalCount">—</strong><span>취급 품목</span></div><div class="sum"><strong id="sectionCount">—</strong><span>창고 분류</span></div></div>
+      </div>
+    </div>
+  </header>
+
+  <div class="hero-wrap">
+    <section class="hero">
+      <p>저희는 <strong>동해, 인천, 군산 등 산지에 창고를 두고 직접 출고</strong>하고 있는 <strong>(주)마스터</strong>입니다.</p>
+      <p>위탁, 사입 모두 가능하시고 한 개만 주문하셔도 됩니다. 또 이미 취급하시는 상품이 있으시다면 더 저렴하게 받아보세요.</p>
+      <div class="notice-row">
+        <div class="notice">📋 상품 정보는 마스터 유통 Google 스프레드시트에서 불러옵니다. · 공급가는 별도 문의입니다.</div>
+        <div class="contact-actions"><button class="contact-btn" id="copyKakao" type="button">💬 카카오톡 solyj96</button><a class="contact-btn" href="mailto:solyj96@naver.com">✉ solyj96@naver.com</a></div>
+      </div>
+    </section>
+  </div>
+
+  <div class="workspace">
+    <aside class="sidebar"><div class="sidebar-title">스프레드시트 분류</div><nav class="section-list" id="sectionList"></nav></aside>
+    <main class="main">
+      <div class="toolbar">
+        <div class="search-wrap"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.2-3.2"></path></svg><input class="search" id="searchInput" type="search" autocomplete="off" placeholder="상품명 검색 — 예: 오징어, 복숭아, 갈비…" /></div>
+        <div class="sorts"><button class="sort-btn active" data-sort="sheet" type="button">시트순</button><button class="sort-btn" data-sort="name" type="button">이름순</button><button class="sort-btn" data-sort="changed" type="button">최근 변동순</button></div>
+      </div>
+      <div class="section-head"><h2 id="sectionTitle">전체 상품</h2><div class="section-meta"><strong id="visibleCount">—</strong>개 품목 · 사진 클릭 시 확대</div></div>
+      <div id="content"><div class="state"><strong>스프레드시트 연결을 준비하고 있습니다.</strong>잠시만 기다려주세요.</div></div>
+    </main>
+  </div>
+
+  <a class="floating-kakao" href="https://open.kakao.com/o/sSucXuLi" target="_blank" rel="noopener noreferrer"><span>💬</span><div>오픈카톡 문의<small>스크롤과 상관없이 항상 표시</small></div></a>
+  <footer class="footer">(주)마스터 · 거래처 상품 카탈로그 · Google Sheets 연동</footer>
+
+  <div class="modal" id="imageModal"><div class="modal-card"><div class="modal-head"><div class="modal-title" id="imageTitle">상품 이미지</div><button class="modal-close" data-close="imageModal" type="button">✕</button></div><div class="modal-body"><img id="imageLarge" alt="상품 이미지 확대" /></div></div></div>
+  <div class="modal" id="imageHelpModal"><div class="modal-card" style="width:min(100%,520px)"><div class="modal-head"><div class="modal-title">썸네일 수정 방법</div><button class="modal-close" data-close="imageHelpModal" type="button">✕</button></div><div class="modal-body help-box">이 버전은 <b>Google 스프레드시트를 유일한 상품 원본</b>으로 사용합니다.<br><br>썸네일은 스프레드시트의 <b>「카탈로그이미지」</b> 탭에서 해당 상품의 <b>이미지URL</b>을 바꾸면 됩니다. 카탈로그를 새로고침하면 변경된 사진이 반영됩니다.</div></div></div>
+
+<script>
+(() => {
+  'use strict';
+
+  // Apps Script 웹 앱 배포 후 받은 /exec 주소를 아래 따옴표 안에 넣습니다.
+  const SHEET_API_URL = 'https://script.google.com/macros/s/AKfycbwnDBcCJGTYiUCdCPN5eP2Sl6iedr1IJKEKDDWbwJ-PI5s25iI9YYaZsDIp-SXIjkCg9g/exec';
+  const AUTO_REFRESH_MS = 5 * 60 * 1000;
+  const THEME_KEY = 'masterCatalogTheme';
+
+  const $ = id => document.getElementById(id);
+  const els = {sectionList:$('sectionList'),search:$('searchInput'),content:$('content'),sectionTitle:$('sectionTitle'),visibleCount:$('visibleCount'),totalCount:$('totalCount'),sectionCount:$('sectionCount'),syncText:$('syncText'),themeBtn:$('themeBtn'),refreshBtn:$('refreshBtn'),imageModal:$('imageModal'),imageTitle:$('imageTitle'),imageLarge:$('imageLarge'),imageHelpModal:$('imageHelpModal')};
+  let products=[]; let sectionOrder=[]; let activeSection='__ALL__'; let activeSort='sheet'; let loading=false;
+
+  function text(v){return v==null?'':String(v).trim()}
+  function esc(v){return text(v).replace(/[&<>'"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c]))}
+  function validApiUrl(){return /^https:\/\/script\.google\.com\/macros\/s\/.+\/exec(?:\?.*)?$/i.test(SHEET_API_URL)}
+  function sectionLabel(s){return s==='단독(유료)'?'단독(유)':s==='단독(무료)'?'단독(무)':s}
+
+  function applyTheme(theme){const dark=theme==='dark';document.documentElement.setAttribute('data-theme',dark?'dark':'light');try{localStorage.setItem(THEME_KEY,dark?'dark':'light')}catch{}els.themeBtn.textContent=dark?'☀ 다크모드 ON':'🌙 다크모드 OFF'}
+  function initTheme(){let t='light';try{t=localStorage.getItem(THEME_KEY)||'light'}catch{}applyTheme(t)}
+
+  function countsBySection(){const m=new Map();products.forEach(p=>m.set(p.section,(m.get(p.section)||0)+1));return m}
+  function renderSections(){const counts=countsBySection();const buttons=[{key:'__ALL__',label:'전체',count:products.length},...sectionOrder.map(s=>({key:s,label:sectionLabel(s),count:counts.get(s)||0}))];els.sectionList.innerHTML=buttons.map(x=>`<button class="section-btn ${x.key===activeSection?'active':''}" data-section="${esc(x.key)}" type="button"><span>${esc(x.label)}</span><span class="count">${x.count}</span></button>`).join('');els.sectionList.querySelectorAll('.section-btn').forEach(btn=>btn.addEventListener('click',()=>{activeSection=btn.dataset.section;renderAll()}))}
+
+  function changedScore(p){const raw=text(p.changedAt);if(!raw)return 0;const parsed=Date.parse(raw);if(Number.isFinite(parsed))return parsed;const digits=raw.replace(/[^0-9]/g,'');return Number(digits)||1}
+  function filtered(){const q=els.search.value.trim().toLocaleLowerCase('ko');let arr=products.map((p,i)=>({p,i}));if(activeSection!=='__ALL__')arr=arr.filter(x=>x.p.section===activeSection);if(q)arr=arr.filter(x=>text(x.p.name).toLocaleLowerCase('ko').includes(q));if(activeSort==='name')arr.sort((a,b)=>text(a.p.name).localeCompare(text(b.p.name),'ko',{numeric:true}));else if(activeSort==='changed')arr.sort((a,b)=>changedScore(b.p)-changedScore(a.p)||a.i-b.i);else arr.sort((a,b)=>{const sa=sectionOrder.indexOf(a.p.section),sb=sectionOrder.indexOf(b.p.section);if(sa!==sb)return sa-sb;return (Number(a.p.sheetOrder)||a.i)-(Number(b.p.sheetOrder)||b.i)});return arr.map(x=>x.p)}
+
+  function card(p){const img=text(p.imageUrl);const desc=text(p.description);const deadline=text(p.deadline);const tax=text(p.tax);const kind=text(p.kind);const chips=[`<span class="chip primary">📍 ${esc(p.warehouse)}</span>`,tax?`<span class="chip">${esc(tax)}</span>`:'',kind?`<span class="chip">${esc(kind)}</span>`:''].join('');return `<article class="card"><div class="image-box" data-img="${esc(img)}" data-title="${esc(p.name)}">${img?`<img loading="lazy" decoding="async" src="${esc(img)}" alt="${esc(p.name)}" onerror="this.remove();this.parentElement.insertAdjacentHTML('afterbegin','<div class=&quot;no-image&quot;>이미지 준비중</div>')">`:`<div class="no-image">이미지 준비중</div>`}<button class="image-guide" type="button" title="썸네일 수정 안내">✎</button><div class="image-footer"><span class="warehouse-badge">${esc(p.warehouse)}</span></div></div><div class="card-body"><div class="name-box"><h3 class="product-name">${esc(p.name)}</h3></div><div class="chips">${chips}</div><div class="description-box"><div class="description-label">상품 설명</div><p class="description ${desc?'':'empty'}">${esc(desc||'스프레드시트에 상품설명을 입력하면 이곳에 그대로 표시됩니다.')}</p></div><div class="card-foot"><span class="inquiry">공급가 별도 문의</span><span class="deadline">${esc(deadline)}</span></div></div></article>`}
+
+  function bindCards(){document.querySelectorAll('.image-box').forEach(box=>{box.addEventListener('click',e=>{if(e.target.closest('.image-guide'))return;const src=box.dataset.img;if(!src)return;els.imageTitle.textContent=box.dataset.title||'상품 이미지';els.imageLarge.src=src;openModal(els.imageModal)})});document.querySelectorAll('.image-guide').forEach(btn=>btn.addEventListener('click',e=>{e.stopPropagation();openModal(els.imageHelpModal)}))}
+  function renderProducts(){const arr=filtered();els.visibleCount.textContent=arr.length.toLocaleString('ko-KR');els.sectionTitle.textContent=activeSection==='__ALL__'?'전체 상품':sectionLabel(activeSection);els.content.innerHTML=arr.length?`<section class="grid">${arr.map(card).join('')}</section>`:`<div class="state"><strong>조건에 맞는 상품이 없습니다.</strong>검색어 또는 왼쪽 분류를 변경해주세요.</div>`;bindCards()}
+  function renderAll(){renderSections();renderProducts()}
+
+  function openModal(m){m.classList.add('show')} function closeModal(m){m.classList.remove('show');if(m===els.imageModal)els.imageLarge.removeAttribute('src')}
+  document.querySelectorAll('[data-close]').forEach(b=>b.addEventListener('click',()=>closeModal($(b.dataset.close))));[els.imageModal,els.imageHelpModal].forEach(m=>m.addEventListener('click',e=>{if(e.target===m)closeModal(m)}));document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeModal(els.imageModal);closeModal(els.imageHelpModal)}})
+
+  function showConfigNeeded(){els.syncText.textContent='Google 스프레드시트 API 주소 설정 필요';els.content.innerHTML=`<div class="state"><strong>Google 스프레드시트 연결을 한 번만 설정하면 됩니다.</strong>Apps Script 웹 앱 주소를 catalog.html의 <code>SHEET_API_URL</code>에 넣어주세요.<br>설정 후에는 Google 스프레드시트만 상품 원본으로 사용합니다.</div>`}
+
+  function loadSheet(){if(loading)return;if(!validApiUrl()){showConfigNeeded();return}loading=true;els.refreshBtn.disabled=true;els.syncText.textContent='Google 스프레드시트에서 최신 상품을 불러오는 중…';const cb='__masterCatalog_'+Date.now()+'_'+Math.random().toString(36).slice(2);const script=document.createElement('script');const cleanUrl=SHEET_API_URL.split('?')[0];const timer=setTimeout(()=>finishError('응답 시간이 초과되었습니다.'),15000);function cleanup(){clearTimeout(timer);delete window[cb];script.remove();loading=false;els.refreshBtn.disabled=false}function finishError(msg){cleanup();els.syncText.textContent='스프레드시트 연결 확인 필요';els.content.innerHTML=`<div class="state"><strong>상품 정보를 불러오지 못했습니다.</strong>${esc(msg)}</div>`}window[cb]=payload=>{if(!payload||payload.ok!==true){finishError(payload&&payload.error?payload.error:'스프레드시트 응답 오류');return}cleanup();products=Array.isArray(payload.products)?payload.products:[];sectionOrder=Array.isArray(payload.sectionOrder)?payload.sectionOrder:[];activeSection=sectionOrder.includes(activeSection)||activeSection==='__ALL__'?activeSection:'__ALL__';els.totalCount.textContent=products.length.toLocaleString('ko-KR');els.sectionCount.textContent=sectionOrder.length.toLocaleString('ko-KR');const d=payload.generatedAt?new Date(payload.generatedAt):new Date();els.syncText.textContent='Google 스프레드시트 연동 · 마지막 확인 '+new Intl.DateTimeFormat('ko-KR',{month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit',hour12:false,timeZone:'Asia/Seoul'}).format(d);renderAll()};script.onerror=()=>finishError('Apps Script 웹 앱 주소 또는 공개 설정을 확인해주세요.');script.src=cleanUrl+'?callback='+encodeURIComponent(cb)+'&_='+Date.now();document.body.appendChild(script)}
+
+  els.search.addEventListener('input',renderProducts);document.querySelectorAll('.sort-btn').forEach(btn=>btn.addEventListener('click',()=>{activeSort=btn.dataset.sort;document.querySelectorAll('.sort-btn').forEach(x=>x.classList.toggle('active',x===btn));renderProducts()}));els.themeBtn.addEventListener('click',()=>applyTheme(document.documentElement.getAttribute('data-theme')==='dark'?'light':'dark'));els.refreshBtn.addEventListener('click',loadSheet);$('copyKakao').addEventListener('click',async function(){try{await navigator.clipboard.writeText('solyj96');const old=this.textContent;this.textContent='✓ 카카오톡 ID 복사됨';setTimeout(()=>this.textContent=old,1400)}catch{alert('카카오톡 ID: solyj96')}});
+
+  initTheme();loadSheet();setInterval(()=>{if(document.visibilityState==='visible')loadSheet()},AUTO_REFRESH_MS);
+})();
+</script>
+</body>
+</html>
