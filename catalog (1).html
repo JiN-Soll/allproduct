@@ -1,0 +1,547 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="(주)마스터 거래처용 상품 카탈로그" />
+  <title>마스터 유통 상품 카탈로그</title>
+  <style>
+    :root{
+      --bg:#f4f7fb;
+      --panel:#ffffff;
+      --line:#dbe4ef;
+      --line-strong:#c9d5e5;
+      --text:#172033;
+      --muted:#68758a;
+      --blue:#2368b5;
+      --blue-dark:#174b86;
+      --blue-soft:#eaf3ff;
+      --navy:#12375f;
+      --green:#1a8f62;
+      --orange:#d87916;
+      --danger:#b94b4b;
+      --shadow:0 8px 26px rgba(31,56,88,.07);
+      --radius:14px;
+    }
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{
+      margin:0;
+      color:var(--text);
+      background:var(--bg);
+      font-family:Pretendard,"Noto Sans KR","Apple SD Gothic Neo",Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+      font-size:14px;
+      line-height:1.5;
+    }
+    button,input{font:inherit}
+    button{cursor:pointer}
+    a{color:inherit;text-decoration:none}
+    .page{min-height:100vh}
+
+    .topbar{
+      position:sticky;top:0;z-index:50;
+      background:rgba(255,255,255,.96);
+      backdrop-filter:blur(10px);
+      border-bottom:1px solid var(--line);
+    }
+    .topbar-inner{
+      max-width:1760px;margin:0 auto;padding:14px 22px;
+      display:flex;align-items:center;justify-content:space-between;gap:18px;
+    }
+    .brand{display:flex;align-items:center;gap:11px;min-width:0}
+    .brand-dot{width:11px;height:11px;border-radius:50%;background:var(--green);box-shadow:0 0 0 5px #e5f5ef;flex:0 0 auto}
+    .brand h1{margin:0;font-size:24px;line-height:1.15;letter-spacing:-.7px;font-weight:800;white-space:nowrap}
+    .brand small{display:block;margin-top:4px;color:var(--muted);font-size:11px;font-weight:500}
+    .summary{display:flex;align-items:center;gap:20px;flex:0 0 auto}
+    .summary-item{text-align:right;min-width:55px}
+    .summary-item strong{display:block;font-size:22px;line-height:1;color:var(--text);font-weight:800}
+    .summary-item span{display:block;font-size:10px;color:var(--muted);margin-top:4px}
+
+    .hero-wrap{max-width:1760px;margin:0 auto;padding:16px 22px 0}
+    .hero{
+      border:1px solid var(--line);background:var(--panel);border-radius:12px;
+      padding:18px 20px;box-shadow:0 2px 8px rgba(31,56,88,.03)
+    }
+    .hero p{margin:0 0 8px;font-size:14px;letter-spacing:-.2px}
+    .hero p:last-child{margin-bottom:0}
+    .hero strong{color:var(--blue-dark)}
+    .contact-strip{
+      margin-top:10px;border:1px solid var(--line);border-left:4px solid var(--blue);
+      background:#fff;border-radius:10px;padding:10px 14px;
+      display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;
+    }
+    .contact-strip .notice{font-size:13px;font-weight:700}
+    .contact-actions{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+    .contact-btn{
+      border:1px solid var(--line-strong);background:#fff;color:var(--text);border-radius:8px;
+      padding:7px 10px;font-size:12px;font-weight:700;transition:.15s ease;
+    }
+    .contact-btn:hover{border-color:var(--blue);color:var(--blue)}
+
+    .workspace{
+      max-width:1760px;margin:0 auto;padding:18px 22px 40px;
+      display:grid;grid-template-columns:190px minmax(0,1fr);gap:18px;align-items:start;
+    }
+    .sidebar{
+      position:sticky;top:83px;background:var(--panel);border:1px solid var(--line);
+      border-radius:12px;padding:10px;box-shadow:var(--shadow);max-height:calc(100vh - 104px);overflow:auto;
+    }
+    .sidebar-title{padding:5px 8px 9px;color:var(--muted);font-size:11px;font-weight:700}
+    .warehouse-list{display:flex;flex-direction:column;gap:3px}
+    .warehouse-btn{
+      width:100%;border:0;background:transparent;border-radius:8px;padding:10px 10px;
+      display:flex;align-items:center;justify-content:space-between;gap:8px;color:var(--text);font-weight:700;text-align:left;
+    }
+    .warehouse-btn:hover{background:#f1f5fa}
+    .warehouse-btn.active{background:var(--blue);color:#fff}
+    .warehouse-btn .count{font-size:10px;font-weight:600;opacity:.72}
+
+    .main{min-width:0}
+    .toolbar{
+      background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:10px;
+      display:flex;align-items:center;gap:10px;box-shadow:0 2px 8px rgba(31,56,88,.03);position:sticky;top:83px;z-index:30;
+    }
+    .search-wrap{position:relative;flex:1;min-width:180px}
+    .search-wrap svg{position:absolute;left:13px;top:50%;transform:translateY(-50%);width:18px;height:18px;color:#8b98aa}
+    .search{
+      width:100%;height:42px;border:1px solid var(--line);background:#fbfcfe;border-radius:9px;
+      padding:0 14px 0 40px;outline:none;color:var(--text);transition:.15s ease;
+    }
+    .search:focus{border-color:#7eafe5;box-shadow:0 0 0 3px #e7f2ff}
+    .sorts{display:flex;align-items:center;gap:6px;flex-wrap:wrap;justify-content:flex-end}
+    .sort-btn{
+      height:36px;border:1px solid var(--line-strong);background:#fff;border-radius:8px;padding:0 11px;
+      font-size:12px;font-weight:700;color:#536076;white-space:nowrap;
+    }
+    .sort-btn:hover{border-color:#93b8df;color:var(--blue)}
+    .sort-btn.active{border-color:var(--blue);background:var(--blue-soft);color:var(--blue-dark)}
+
+    .section-head{display:flex;align-items:end;justify-content:space-between;gap:12px;padding:15px 4px 11px}
+    .section-head h2{margin:0;font-size:18px;letter-spacing:-.4px}
+    .section-meta{color:var(--muted);font-size:11px;text-align:right}
+    .section-meta strong{color:var(--text)}
+
+    .grid{
+      display:grid;
+      grid-template-columns:repeat(6,minmax(0,1fr));
+      gap:12px;
+    }
+    .card{
+      min-width:0;background:var(--panel);border:1px solid var(--line-strong);border-radius:9px;overflow:hidden;
+      box-shadow:0 2px 8px rgba(29,52,78,.035);transition:transform .16s ease,box-shadow .16s ease,border-color .16s ease;
+      display:flex;flex-direction:column;
+    }
+    .card:hover{transform:translateY(-2px);border-color:#a8c5e6;box-shadow:0 9px 20px rgba(31,67,109,.09)}
+    .image-box{position:relative;aspect-ratio:1.23/1;background:#edf1f6;overflow:hidden}
+    .image-box img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .2s ease}
+    .card:hover .image-box img{transform:scale(1.015)}
+    .no-image{width:100%;height:100%;display:grid;place-items:center;background:repeating-linear-gradient(135deg,#f2f5f8 0 8px,#e7ecf1 8px 16px);color:#8793a3;font-size:12px;font-weight:700}
+    .tag{
+      position:absolute;top:8px;left:8px;border:1px solid rgba(32,64,102,.18);background:rgba(255,255,255,.93);
+      border-radius:4px;padding:3px 6px;font-size:10px;color:#34506f;font-weight:700;box-shadow:0 2px 5px rgba(0,0,0,.04)
+    }
+    .change-badge{
+      position:absolute;top:8px;right:8px;border-radius:4px;padding:3px 6px;font-size:10px;font-weight:800;
+      background:#fff2df;color:#a15a0b;border:1px solid #f1c789;
+    }
+    .image-caption{
+      position:absolute;left:0;right:0;bottom:0;padding:5px 8px;background:rgba(22,58,97,.78);color:#fff;
+      text-align:center;font-size:10px;font-weight:700;letter-spacing:-.1px
+    }
+    .card-body{padding:10px 10px 11px;display:flex;flex-direction:column;flex:1;min-height:148px}
+    .product-name{
+      font-size:13px;line-height:1.42;font-weight:800;letter-spacing:-.25px;margin:0 0 7px;
+      display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;min-height:37px;
+    }
+    .meta-lines{display:grid;gap:4px;font-size:11px;color:#59677a;min-height:54px}
+    .meta-line{display:flex;gap:5px;min-width:0}
+    .meta-label{color:#8a96a7;flex:0 0 auto}
+    .meta-value{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+    .card-foot{margin-top:auto;padding-top:8px;border-top:1px dashed #dbe3ed;display:flex;align-items:center;justify-content:space-between;gap:8px}
+    .inquiry{font-size:11px;color:var(--blue-dark);font-weight:800}
+    .ship{font-size:10px;color:#566377;text-align:right;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:55%}
+
+    .state{
+      border:1px dashed var(--line-strong);background:#fff;border-radius:12px;padding:48px 20px;text-align:center;color:var(--muted)
+    }
+    .state strong{display:block;color:var(--text);font-size:17px;margin-bottom:6px}
+    .loading-dots::after{content:"";animation:dots 1.3s infinite}
+    @keyframes dots{0%{content:""}33%{content:"."}66%{content:".."}100%{content:"..."}}
+
+    .preview-alert{
+      display:none;margin-bottom:12px;border:1px solid #f0c477;background:#fff8e9;color:#7d5618;border-radius:10px;padding:10px 12px;font-size:12px;
+    }
+    .preview-alert.show{display:block}
+
+    .footer{max-width:1760px;margin:0 auto;padding:0 22px 35px;color:#8692a4;font-size:11px;text-align:center}
+
+    @media (max-width:1500px){.grid{grid-template-columns:repeat(5,minmax(0,1fr))}}
+    @media (max-width:1240px){.grid{grid-template-columns:repeat(4,minmax(0,1fr))}.workspace{grid-template-columns:170px minmax(0,1fr)}}
+    @media (max-width:980px){
+      .topbar-inner,.hero-wrap,.workspace,.footer{padding-left:14px;padding-right:14px}
+      .workspace{display:block;padding-top:12px}
+      .sidebar{position:relative;top:auto;max-height:none;margin-bottom:10px;padding:8px;overflow:hidden}
+      .sidebar-title{display:none}
+      .warehouse-list{flex-direction:row;overflow-x:auto;padding-bottom:2px;scrollbar-width:thin}
+      .warehouse-btn{width:auto;flex:0 0 auto;padding:8px 11px;border:1px solid var(--line);background:#fff}
+      .warehouse-btn.active{border-color:var(--blue)}
+      .toolbar{top:73px;flex-direction:column;align-items:stretch}
+      .sorts{justify-content:flex-start;overflow-x:auto;flex-wrap:nowrap;padding-bottom:2px}
+      .grid{grid-template-columns:repeat(3,minmax(0,1fr))}
+    }
+    @media (max-width:700px){
+      .brand h1{font-size:19px}.brand small{display:none}.summary{gap:10px}.summary-item strong{font-size:18px}.summary-item:nth-child(2){display:none}
+      .topbar-inner{padding-top:11px;padding-bottom:11px}
+      .hero-wrap{padding-top:10px}.hero{padding:14px}.hero p{font-size:12px;line-height:1.65}.contact-strip{padding:9px 10px}
+      .contact-strip .notice{font-size:11px}
+      .toolbar{top:61px}.search{height:40px}.sort-btn{height:34px}
+      .grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+      .card-body{padding:8px;min-height:142px}.product-name{font-size:12px;min-height:34px}.meta-lines{font-size:10px}.ship{display:none}
+      .section-head{padding-top:12px}.section-head h2{font-size:16px}
+    }
+    @media (max-width:390px){.grid{grid-template-columns:1fr 1fr}.image-box{aspect-ratio:1.12/1}.card-body{min-height:146px}}
+  </style>
+</head>
+<body>
+  <div class="page">
+    <header class="topbar">
+      <div class="topbar-inner">
+        <div class="brand">
+          <span class="brand-dot" aria-hidden="true"></span>
+          <div>
+            <h1>마스터 유통 상품 카탈로그</h1>
+            <small id="syncText">거래처 전용 · 상품 정보를 불러오는 중입니다</small>
+          </div>
+        </div>
+        <div class="summary" aria-label="카탈로그 요약">
+          <div class="summary-item"><strong id="totalCount">—</strong><span>취급 품목</span></div>
+          <div class="summary-item"><strong id="warehouseCount">—</strong><span>창고</span></div>
+        </div>
+      </div>
+    </header>
+
+    <div class="hero-wrap">
+      <section class="hero">
+        <p>저희는 <strong>동해, 인천, 군산 등 산지에 창고를 두고 직접 출고</strong>하고 있는 <strong>(주)마스터</strong>입니다.</p>
+        <p>위탁, 사입 모두 가능하시고 한 개만 주문하셔도 됩니다. 또 이미 취급하시는 상품이 있으시다면 더 저렴하게 받아보세요.</p>
+      </section>
+      <div class="contact-strip">
+        <div class="notice">🚚 창고별 배송 조건은 상품 카드의 배송비 정보를 확인해주세요. · 공급가는 별도 문의입니다.</div>
+        <div class="contact-actions">
+          <button class="contact-btn" id="copyKakao" type="button">💬 카카오톡 solyj96</button>
+          <a class="contact-btn" href="mailto:solyj96@naver.com">✉ solyj96@naver.com</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="workspace">
+      <aside class="sidebar" aria-label="창고 선택">
+        <div class="sidebar-title">창고</div>
+        <nav class="warehouse-list" id="warehouseList"></nav>
+      </aside>
+
+      <main class="main">
+        <div class="toolbar">
+          <div class="search-wrap">
+            <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.2-3.2"></path></svg>
+            <input class="search" id="searchInput" type="search" autocomplete="off" placeholder="상품명 검색 — 예: 갈치, 새우, 사과, 옥수수…" />
+          </div>
+          <div class="sorts" aria-label="정렬 방식">
+            <button class="sort-btn active" data-sort="sheet" type="button">시트순</button>
+            <button class="sort-btn" data-sort="name" type="button">이름순</button>
+            <button class="sort-btn" data-sort="changed" type="button">최근 변동순</button>
+          </div>
+        </div>
+
+        <div class="section-head">
+          <h2 id="sectionTitle">전체 상품</h2>
+          <div class="section-meta"><strong id="visibleCount">—</strong>개 품목 · 공급가 <strong>별도 문의</strong></div>
+        </div>
+
+        <div class="preview-alert" id="previewAlert">현재는 파일 미리보기용 샘플 상품이 표시되고 있습니다. GitHub Pages에 올리면 <b>wonbi의 기존 상품 데이터</b>를 불러와 표시합니다.</div>
+        <div id="content"><div class="state"><strong>상품을 불러오는 중입니다<span class="loading-dots"></span></strong>잠시만 기다려주세요.</div></div>
+      </main>
+    </div>
+
+    <footer class="footer">(주)마스터 · 거래처 상품 카탈로그 · catalog</footer>
+  </div>
+
+<script>
+(() => {
+  'use strict';
+
+  const DATA_URLS = [
+    'https://raw.githubusercontent.com/wonbi/allproduct/main/data/products.json',
+    'https://raw.githubusercontent.com/wonbi/allproduct/master/data/products.json',
+    'https://wonbi.github.io/allproduct/data/products.json'
+  ];
+  const els = {
+    totalCount: document.getElementById('totalCount'), warehouseCount: document.getElementById('warehouseCount'),
+    visibleCount: document.getElementById('visibleCount'), warehouseList: document.getElementById('warehouseList'),
+    searchInput: document.getElementById('searchInput'), sectionTitle: document.getElementById('sectionTitle'),
+    content: document.getElementById('content'), syncText: document.getElementById('syncText'),
+    previewAlert: document.getElementById('previewAlert')
+  };
+
+  let products = [];
+  let activeWarehouse = '__ALL__';
+  let activeSort = 'sheet';
+  let warehouseOrder = [];
+
+  const FIELD = {
+    name: ['name','productName','product_name','title','상품명','품목명','품목','상품'],
+    warehouse: ['warehouse','warehouseName','warehouse_name','store','sheet','sheetName','창고','창고명','시트','거래처'],
+    spec: ['spec','specification','size','option','options','detail','details','note','notes','규격','규격비고','규격_비고','비고','옵션','중량'],
+    origin: ['origin','originPlace','origin_place','country','source','원산지','산지'],
+    shipping: ['shipping','shippingFee','shipping_fee','delivery','deliveryFee','delivery_fee','freight','택배','택배비','배송','배송비'],
+    image: ['image','imageUrl','imageURL','image_url','img','photo','photoUrl','photo_url','thumbnail','사진','이미지','이미지URL'],
+    price: ['price','supplyPrice','supply_price','cost','wholesalePrice','공급가','가격','판매가'],
+    prevPrice: ['prevPrice','previousPrice','previous_price','yesterdayPrice','yesterday_price','전일가','전일가격','전일공급가'],
+    change: ['change','priceChange','price_change','difference','diff','delta','전일대비','가격변동','변동'],
+    soldOut: ['soldOut','sold_out','outOfStock','out_of_stock','isSoldOut','품절','품절여부'],
+    stock: ['stock','quantity','qty','재고','수량'],
+    order: ['order','sort','sheetOrder','sheet_order','row','rowIndex','row_index','순서','시트순'],
+    updated: ['updatedAt','updated_at','modifiedAt','modified_at','changedAt','changed_at','lastModified','last_modified','수정일','변경일'],
+    deadline: ['deadline','orderDeadline','order_deadline','cutoff','발주마감','마감'],
+    tax: ['tax','taxType','tax_type','과세','면세']
+  };
+
+  const own = (obj, key) => Object.prototype.hasOwnProperty.call(obj || {}, key);
+  function pick(obj, keys, fallback = '') {
+    for (const key of keys) {
+      if (own(obj,key) && obj[key] !== null && obj[key] !== undefined && String(obj[key]).trim() !== '') return obj[key];
+    }
+    return fallback;
+  }
+  function text(v){ return v === null || v === undefined ? '' : String(v).trim(); }
+  function num(v){
+    if (typeof v === 'number') return Number.isFinite(v) ? v : NaN;
+    const cleaned = text(v).replace(/[^0-9+\-.]/g,'');
+    return cleaned ? Number(cleaned) : NaN;
+  }
+  function parseBool(v){
+    if (typeof v === 'boolean') return v;
+    if (typeof v === 'number') return v !== 0;
+    const s = text(v).toLowerCase();
+    return ['true','1','yes','y','품절','soldout','sold out','out of stock','판매중지','중지'].includes(s);
+  }
+  function isSoldOut(p){
+    const flag = pick(p, FIELD.soldOut, null);
+    if (flag !== null && flag !== '') return parseBool(flag);
+    const stockRaw = pick(p, FIELD.stock, null);
+    if (stockRaw !== null && stockRaw !== '') {
+      const n = num(stockRaw); if (Number.isFinite(n) && n <= 0) return true;
+    }
+    return false;
+  }
+  function changeScore(p){
+    const explicit = pick(p, FIELD.change, '');
+    if (text(explicit)) {
+      const n = num(explicit);
+      if (Number.isFinite(n)) return Math.abs(n);
+      if (!/^(0|없음|동일|변동없음|-)$/.test(text(explicit))) return 1;
+    }
+    const cur = num(pick(p,FIELD.price,''));
+    const prev = num(pick(p,FIELD.prevPrice,''));
+    if (Number.isFinite(cur) && Number.isFinite(prev)) return Math.abs(cur-prev);
+    return 0;
+  }
+  function hasPriceChange(p){ return changeScore(p) > 0; }
+  function updatedScore(p){
+    const raw = pick(p, FIELD.updated, '');
+    const t = Date.parse(raw); return Number.isFinite(t) ? t : 0;
+  }
+  function orderScore(p, index){
+    const raw = num(pick(p,FIELD.order,''));
+    return Number.isFinite(raw) ? raw : index;
+  }
+  function normalizeImage(src){
+    src = text(src);
+    if (!src) return '';
+    if (/^data:|^blob:|^\.?\//i.test(src)) return src;
+    if (!/^https?:\/\//i.test(src)) return src;
+    if (src.includes('images.weserv.nl')) return src;
+    return 'https://images.weserv.nl/?url=' + encodeURIComponent(src) + '&w=700&h=560&fit=cover&output=webp';
+  }
+  function escapeHtml(s){
+    return text(s).replace(/[&<>'"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c]));
+  }
+  function extractProducts(data){
+    if (Array.isArray(data)) return data;
+    for (const k of ['products','items','data','list','catalog']) if (Array.isArray(data?.[k])) return data[k];
+    if (data && typeof data === 'object') {
+      const arrays = Object.values(data).filter(Array.isArray);
+      if (arrays.length === 1) return arrays[0];
+    }
+    return [];
+  }
+  function getWarehouse(p){ return text(pick(p,FIELD.warehouse,'기타')) || '기타'; }
+  function getName(p){ return text(pick(p,FIELD.name,'상품명 미등록')) || '상품명 미등록'; }
+
+  function buildWarehouseOrder(list){
+    const seen = new Set(); const out=[];
+    list.forEach(p => { const w=getWarehouse(p); if(!seen.has(w)){seen.add(w);out.push(w);} });
+    return out;
+  }
+  function filteredProducts(){
+    const q = els.searchInput.value.trim().toLocaleLowerCase('ko');
+    let arr = products.map((p,i)=>({p,i})).filter(({p}) => !isSoldOut(p));
+    if (activeWarehouse !== '__ALL__') arr = arr.filter(({p}) => getWarehouse(p) === activeWarehouse);
+    if (q) arr = arr.filter(({p}) => getName(p).toLocaleLowerCase('ko').includes(q));
+    if (activeSort === 'name') arr.sort((a,b)=>getName(a.p).localeCompare(getName(b.p),'ko',{numeric:true,sensitivity:'base'}));
+    if (activeSort === 'changed') arr.sort((a,b)=> {
+      const d = changeScore(b.p)-changeScore(a.p); if(d) return d;
+      const u = updatedScore(b.p)-updatedScore(a.p); if(u) return u;
+      return a.i-b.i;
+    });
+    if (activeSort === 'sheet') arr.sort((a,b)=>orderScore(a.p,a.i)-orderScore(b.p,b.i));
+    return arr.map(x=>x.p);
+  }
+
+  function renderWarehouses(){
+    const available = products.filter(p=>!isSoldOut(p));
+    const counts = new Map(); available.forEach(p=>counts.set(getWarehouse(p),(counts.get(getWarehouse(p))||0)+1));
+    const allCount = available.length;
+    const buttons = [{key:'__ALL__',label:'전체',count:allCount}, ...warehouseOrder.map(w=>({key:w,label:w,count:counts.get(w)||0}))];
+    els.warehouseList.innerHTML = buttons.map(x=>`<button class="warehouse-btn ${x.key===activeWarehouse?'active':''}" data-warehouse="${escapeHtml(x.key)}" type="button"><span>${escapeHtml(x.label)}</span><span class="count">${x.count}</span></button>`).join('');
+    els.warehouseList.querySelectorAll('.warehouse-btn').forEach(btn=>btn.addEventListener('click',()=>{
+      activeWarehouse=btn.dataset.warehouse; renderAll();
+      if (window.innerWidth < 981) btn.scrollIntoView({behavior:'smooth',inline:'center',block:'nearest'});
+    }));
+  }
+
+  function cardHtml(p){
+    const name = getName(p), warehouse=getWarehouse(p);
+    const spec=text(pick(p,FIELD.spec,'')), origin=text(pick(p,FIELD.origin,'')), shipping=text(pick(p,FIELD.shipping,''));
+    const deadline=text(pick(p,FIELD.deadline,'')), tax=text(pick(p,FIELD.tax,''));
+    const rawImg=text(pick(p,FIELD.image,'')), img=normalizeImage(rawImg), changed=hasPriceChange(p);
+    const imageBlock = img
+      ? `<img loading="lazy" decoding="async" src="${escapeHtml(img)}" data-fallback="${escapeHtml(rawImg)}" alt="${escapeHtml(name)}" onerror="window.__catalogImageError(this)">`
+      : `<div class="no-image">이미지 준비중</div>`;
+    return `<article class="card">
+      <div class="image-box">
+        ${imageBlock}
+        <span class="tag">${escapeHtml(warehouse)}</span>
+        ${changed?'<span class="change-badge">가격 변동</span>':''}
+        <span class="image-caption">상품 정보</span>
+      </div>
+      <div class="card-body">
+        <h3 class="product-name">${escapeHtml(name)}</h3>
+        <div class="meta-lines">
+          ${spec?`<div class="meta-line"><span class="meta-label">규격</span><span class="meta-value" title="${escapeHtml(spec)}">${escapeHtml(spec)}</span></div>`:''}
+          ${origin?`<div class="meta-line"><span class="meta-label">원산지</span><span class="meta-value">${escapeHtml(origin)}</span></div>`:''}
+          ${shipping?`<div class="meta-line"><span class="meta-label">배송비</span><span class="meta-value" title="${escapeHtml(shipping)}">${escapeHtml(shipping)}</span></div>`:''}
+          ${!spec&&!origin&&!shipping?`<div class="meta-line"><span class="meta-label">안내</span><span class="meta-value">세부 정보 별도 문의</span></div>`:''}
+        </div>
+        <div class="card-foot">
+          <span class="inquiry">공급가 별도 문의</span>
+          <span class="ship">${escapeHtml([tax,deadline].filter(Boolean).join(' · '))}</span>
+        </div>
+      </div>
+    </article>`;
+  }
+
+  function renderProducts(){
+    const arr = filteredProducts();
+    els.visibleCount.textContent = arr.length.toLocaleString('ko-KR');
+    els.sectionTitle.textContent = activeWarehouse==='__ALL__' ? '전체 상품' : activeWarehouse;
+    if (!arr.length) {
+      els.content.innerHTML = `<div class="state"><strong>조건에 맞는 상품이 없습니다.</strong>검색어 또는 창고 선택을 바꿔보세요.</div>`; return;
+    }
+    els.content.innerHTML = `<section class="grid">${arr.map(cardHtml).join('')}</section>`;
+  }
+  function renderAll(){ renderWarehouses(); renderProducts(); }
+
+  window.__catalogImageError = (img) => {
+    const fallback = img.dataset.fallback || '';
+    if (fallback && img.src !== fallback && !img.dataset.triedDirect) {
+      img.dataset.triedDirect='1'; img.src=fallback; return;
+    }
+    const box=img.parentElement; img.remove();
+    if (box && !box.querySelector('.no-image')) box.insertAdjacentHTML('afterbegin','<div class="no-image">이미지 준비중</div>');
+  };
+
+  function syncLabel(data){
+    const meta = data && !Array.isArray(data) ? (data.meta || data.metadata || {}) : {};
+    const raw = meta.syncedAt || meta.updatedAt || meta.lastSync || meta.lastUpdated || data?.syncedAt || data?.updatedAt || '';
+    if(raw){
+      const d=new Date(raw); if(!Number.isNaN(d.getTime())) {
+        els.syncText.textContent='거래처 전용 · 마지막 동기화 ' + new Intl.DateTimeFormat('ko-KR',{year:'numeric',month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit',hour12:false,timeZone:'Asia/Seoul'}).format(d);
+        return;
+      }
+    }
+    els.syncText.textContent='거래처 전용 · 기존 상품 데이터와 연동';
+  }
+
+  const sampleProducts = [
+    {name:'청귤(풋귤)',warehouse:'제주',spec:'5kg / 산지직송',origin:'국내산',shipping:'무료 (제주/도서지역 제외)',price:8900,prevPrice:8200,image:''},
+    {name:'천중도 복숭아',warehouse:'경기',spec:'4kg / 12~16과',origin:'국내산',shipping:'무료',price:8200,prevPrice:8200,image:''},
+    {name:'햇당근 10kg',warehouse:'제주',spec:'중품 / 10kg',origin:'국내산',shipping:'무료',price:9400,prevPrice:9100,image:''},
+    {name:'찰옥수수',warehouse:'강원',spec:'16cm 내외 / 5개',origin:'국내산',shipping:'별도 문의',price:7300,prevPrice:7300,image:''},
+    {name:'제주도 은갈치',warehouse:'제주',spec:'150g~170g 내외',origin:'국내산',shipping:'무료',price:14000,prevPrice:14000,image:''},
+    {name:'통통 생물 오징어 1kg',warehouse:'군산',spec:'3~5미 내외',origin:'국내산',shipping:'4,000원',price:12000,prevPrice:11000,image:''},
+    {name:'연안 활 대수게 1kg',warehouse:'인천',spec:'3~4미 내외',origin:'국내산',shipping:'4,000원',price:15000,prevPrice:15000,image:''},
+    {name:'연안 꼬마 참소라 1kg',warehouse:'인천',spec:'1kg',origin:'국내산',shipping:'4,000원',price:8900,prevPrice:8200,image:''},
+    {name:'금직 바지락 1kg',warehouse:'동해',spec:'1kg',origin:'국내산',shipping:'4,000원',price:6200,prevPrice:6200,image:''},
+    {name:'A급 정품 홍게 4kg',warehouse:'동해',spec:'4kg',origin:'국내산',shipping:'별도 문의',price:37000,prevPrice:35000,image:''},
+    {name:'망고 복숭아',warehouse:'경기',spec:'2kg',origin:'국내산',shipping:'무료',price:9800,prevPrice:9800,image:''},
+    {name:'성주참외 가정용',warehouse:'경북',spec:'3kg',origin:'국내산',shipping:'무료',price:6000,prevPrice:6000,image:''}
+  ];
+
+  async function fetchRemoteData(){
+    let lastError = null;
+    for (const url of DATA_URLS){
+      try{
+        const res = await fetch(url, {cache:'no-store', mode:'cors'});
+        if(!res.ok) throw new Error(url + ' → HTTP ' + res.status);
+        const data = await res.json();
+        const list = extractProducts(data).filter(x=>x && typeof x==='object');
+        if(!list.length) throw new Error(url + ' → 상품 배열을 찾을 수 없습니다.');
+        return {data, list, source:url};
+      }catch(err){
+        lastError = err;
+        console.warn('[catalog] 데이터 주소 시도 실패:', url, err);
+      }
+    }
+    throw lastError || new Error('상품 데이터 주소에 연결할 수 없습니다.');
+  }
+
+  async function load(){
+    try{
+      const loaded = await fetchRemoteData();
+      const data = loaded.data;
+      products = loaded.list;
+      warehouseOrder=buildWarehouseOrder(products);
+      els.totalCount.textContent=products.filter(p=>!isSoldOut(p)).length.toLocaleString('ko-KR');
+      els.warehouseCount.textContent=warehouseOrder.length.toLocaleString('ko-KR');
+      syncLabel(data); renderAll();
+    }catch(err){
+      console.warn('[catalog] 실제 상품 데이터 로드 실패:',err);
+      if(location.protocol==='file:' || location.hostname==='localhost' || location.hostname==='127.0.0.1'){
+        products=sampleProducts; warehouseOrder=buildWarehouseOrder(products);
+        els.totalCount.textContent=products.length; els.warehouseCount.textContent=warehouseOrder.length;
+        els.syncText.textContent='거래처 전용 · 로컬 디자인 미리보기'; els.previewAlert.classList.add('show'); renderAll();
+      }else{
+        els.totalCount.textContent='—'; els.warehouseCount.textContent='—'; els.visibleCount.textContent='—';
+        els.syncText.textContent='거래처 전용 · 기존 상품 데이터 연결 확인 필요';
+        els.content.innerHTML=`<div class="state"><strong>기존 상품 데이터를 불러오지 못했습니다.</strong>wonbi 쪽 상품 데이터가 공개되어 있는지 확인해주세요.</div>`;
+      }
+    }
+  }
+
+  els.searchInput.addEventListener('input',renderProducts);
+  document.querySelectorAll('.sort-btn').forEach(btn=>btn.addEventListener('click',()=>{
+    activeSort=btn.dataset.sort;
+    document.querySelectorAll('.sort-btn').forEach(x=>x.classList.toggle('active',x===btn));
+    renderProducts();
+  }));
+  document.getElementById('copyKakao').addEventListener('click',async function(){
+    try{await navigator.clipboard.writeText('solyj96'); const old=this.textContent; this.textContent='✓ 카카오톡 ID 복사됨'; setTimeout(()=>this.textContent=old,1500);}
+    catch{alert('카카오톡 ID: solyj96');}
+  });
+
+  load();
+})();
+</script>
+</body>
+</html>
