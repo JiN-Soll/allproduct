@@ -474,54 +474,62 @@ async function loadImgData(){
 }
 
 /* ══════════════════════════════════════════════════
-   이미지 수정 (관리자) — PC 파일 업로드 방식
-   파일 → base64 → GitHub API로 images/ 폴더에 저장
-   → images.json 업데이트
+   이미지 수정 (관리자) — URL 입력 or PC 파일 업로드
 ══════════════════════════════════════════════════ */
 function editImage(productName) {
   if (!isAdmin()) return;
 
-  // 숨겨진 파일 input 만들어서 클릭
-  const input = document.createElement('input');
-  input.type = 'file';
-  input.accept = 'image/*';
-  input.onchange = async (e) => {
-    const file = e.target.files[0];
-    if (!file) return;
+  const key = pkey(productName);
+  const current = imgData[key] || '';
 
-    // 파일 크기 체크 (5MB 이하)
-    if (file.size > 5 * 1024 * 1024) {
-      showToast('파일이 너무 커요 — 5MB 이하로 해주세요');
-      return;
-    }
+  // 선택 다이얼로그
+  const choice = confirm(
+    `"${productName}"\n\n` +
+    `[확인] → 이미지 URL 직접 입력\n` +
+    `[취소] → PC 파일 선택`
+  );
 
-    showToast('업로드 중… ⏳');
-
-    // 파일 → base64
-    const base64 = await fileToBase64(file);
-
-    // GitHub에 이미지 파일 저장 후 images.json 업데이트
-    await uploadImageFile(productName, file.name, base64);
-  };
-  input.click();
+  if (choice) {
+    // URL 입력 방식
+    const newUrl = prompt('이미지 URL을 입력하세요\n(비우고 확인하면 삭제)', current);
+    if (newUrl === null) return;
+    const trimmed = newUrl.trim();
+    if (trimmed) imgData[key] = trimmed;
+    else delete imgData[key];
+    render();
+    showToast('저장 중… ⏳');
+    commitImgJson(productName);
+  } else {
+    // PC 파일 업로드 방식
+    const input = document.createElement('input');
+    input.type = 'file';
+    input.accept = 'image/*';
+    input.onchange = async (e) => {
+      const file = e.target.files[0];
+      if (!file) return;
+      if (file.size > 5 * 1024 * 1024) {
+        showToast('파일이 너무 커요 — 5MB 이하로 해주세요');
+        return;
+      }
+      showToast('업로드 중… ⏳');
+      const b64 = await fileToBase64(file);
+      await uploadImgFile(productName, file.name, b64);
+    };
+    input.click();
+  }
 }
 
-// File → base64 (data:image/... 접두사 제거)
 function fileToBase64(file) {
   return new Promise((resolve, reject) => {
     const reader = new FileReader();
-    reader.onload = () => {
-      // "data:image/jpeg;base64,XXXXXX" 에서 XXXXXX 부분만 추출
-      const b64 = reader.result.split(',')[1];
-      resolve(b64);
-    };
+    reader.onload = () => resolve(reader.result.split(',')[1]);
     reader.onerror = reject;
     reader.readAsDataURL(file);
   });
 }
 
-// GitHub에 이미지 파일 업로드 + images.json 업데이트
-async function uploadImageFile(productName, fileName, base64Content) {
+// GitHub 토큰 가져오기 (없으면 입력 요청)
+async function getToken() {
   let token = localStorage.getItem(GH_PAT_KEY);
   if (!token) {
     token = prompt(
@@ -533,101 +541,127 @@ async function uploadImageFile(productName, fileName, base64Content) {
       '⑤ 생성된 토큰을 여기 붙여넣기\n\n' +
       '(브라우저에만 저장, 외부 전송 없음)'
     );
-    if (!token) return;
+    if (!token) return null;
     token = token.trim();
     localStorage.setItem(GH_PAT_KEY, token);
   }
+  return token;
+}
 
-  const headers = {
+// GitHub API 공통 헤더
+function ghHeaders(token) {
+  return {
     'Authorization': 'Bearer ' + token,
     'Accept': 'application/vnd.github+json',
     'X-GitHub-Api-Version': '2022-11-28',
     'Content-Type': 'application/json',
   };
+}
+
+// GitHub 파일 SHA 가져오기
+async function getFileSha(api, headers) {
+  const res = await fetch(api + '?ref=main', { headers });
+  if (res.ok) {
+    const j = await res.json();
+    return j.sha;
+  }
+  return null;
+}
+
+// GitHub 파일 PUT (생성/덮어쓰기)
+async function ghPut(api, headers, message, content, sha) {
+  const body = { message, content, branch: 'main' };
+  if (sha) body.sha = sha;
+  const res = await fetch(api, {
+    method: 'PUT', headers, body: JSON.stringify(body)
+  });
+  return res;
+}
+
+// images.json만 업데이트 (URL 입력 방식)
+async function commitImgJson(productName) {
+  const token = await getToken();
+  if (!token) return;
+  const headers = ghHeaders(token);
+  const api = `https://api.github.com/repos/${GH_OWNER}/${GH_REPO}/contents/${GH_IMG_PATH}`;
 
   try {
-    // ── 1단계: 이미지 파일을 images/ 폴더에 업로드 ──
-    // 파일명: 상품명을 영문/숫자로 정리 + 원본 확장자
+    const sha = await getFileSha(api, headers);
+    const content = btoa(unescape(encodeURIComponent(
+      JSON.stringify(imgData, null, 2)
+    )));
+    const res = await ghPut(api, headers,
+      `관리자: "${productName}" 이미지 URL 등록`, content, sha);
+
+    if (res.ok) {
+      render();
+      showToast('이미지가 저장됐어요 ✅');
+    } else if (res.status === 401 || res.status === 403) {
+      localStorage.removeItem(GH_PAT_KEY);
+      showToast('토큰이 유효하지 않아요 — 다시 입력해주세요');
+    } else {
+      const j = await res.json().catch(() => ({}));
+      showToast(`저장 실패 (${res.status}) ${j.message || ''}`);
+    }
+  } catch(e) {
+    showToast('저장 실패 — 네트워크를 확인해주세요');
+    console.error(e);
+  }
+}
+
+// PC 파일 → GitHub images/ 폴더 업로드 + images.json 업데이트
+async function uploadImgFile(productName, fileName, b64) {
+  const token = await getToken();
+  if (!token) return;
+  const headers = ghHeaders(token);
+
+  try {
+    // 1. 이미지 파일 업로드
     const ext = fileName.split('.').pop().toLowerCase() || 'jpg';
     const safeName = pkey(productName).replace(/[^a-z0-9가-힣]/g, '_').slice(0, 60);
     const imgPath = `images/${safeName}.${ext}`;
     const imgApi = `https://api.github.com/repos/${GH_OWNER}/${GH_REPO}/contents/${imgPath}`;
 
-    // 기존 파일 SHA 확인 (덮어쓰기용)
-    let imgSha = null;
-    const chkRes = await fetch(imgApi + '?ref=main', { headers });
-    if (chkRes.ok) {
-      const chkJ = await chkRes.json();
-      imgSha = chkJ.sha;
-    }
+    const imgSha = await getFileSha(imgApi, headers);
+    const imgRes = await ghPut(imgApi, headers,
+      `관리자: "${productName}" 이미지 업로드`, b64, imgSha);
 
-    const imgBody = {
-      message: `관리자: "${productName}" 이미지 업로드`,
-      content: base64Content,
-      branch: 'main',
-    };
-    if (imgSha) imgBody.sha = imgSha;
-
-    const imgPut = await fetch(imgApi, {
-      method: 'PUT', headers, body: JSON.stringify(imgBody)
-    });
-
-    if (!imgPut.ok) {
-      const errJ = await imgPut.json().catch(() => ({}));
-      if (imgPut.status === 401 || imgPut.status === 403) {
+    if (!imgRes.ok) {
+      if (imgRes.status === 401 || imgRes.status === 403) {
         localStorage.removeItem(GH_PAT_KEY);
         showToast('토큰이 유효하지 않아요 — 다시 입력해주세요');
       } else {
-        showToast(`이미지 업로드 실패 (${imgPut.status}): ${errJ.message || ''}`);
+        const j = await imgRes.json().catch(() => ({}));
+        showToast(`업로드 실패 (${imgRes.status}) ${j.message || ''}`);
       }
       return;
     }
 
-    // 업로드된 이미지의 raw URL
-    const rawImgUrl = `https://raw.githubusercontent.com/${GH_OWNER}/${GH_REPO}/main/${imgPath}`;
+    // 2. raw URL 생성 + imgData 업데이트
+    const rawUrl = `https://raw.githubusercontent.com/${GH_OWNER}/${GH_REPO}/main/${imgPath}`;
+    imgData[pkey(productName)] = rawUrl;
 
-    // ── 2단계: images.json 업데이트 ──
-    const key = pkey(productName);
-    imgData[key] = rawImgUrl;
-
+    // 3. images.json 업데이트
     const jsonApi = `https://api.github.com/repos/${GH_OWNER}/${GH_REPO}/contents/${GH_IMG_PATH}`;
-
-    // 기존 images.json SHA 확인
-    let jsonSha = null;
-    const jsonGet = await fetch(jsonApi + '?ref=main', { headers });
-    if (jsonGet.ok) {
-      const jsonJ = await jsonGet.json();
-      jsonSha = jsonJ.sha;
-    }
-
+    const jsonSha = await getFileSha(jsonApi, headers);
     const jsonContent = btoa(unescape(encodeURIComponent(
       JSON.stringify(imgData, null, 2)
     )));
+    const jsonRes = await ghPut(jsonApi, headers,
+      `관리자: "${productName}" 이미지 등록`, jsonContent, jsonSha);
 
-    const jsonBody = {
-      message: `관리자: "${productName}" 이미지 등록`,
-      content: jsonContent,
-      branch: 'main',
-    };
-    if (jsonSha) jsonBody.sha = jsonSha;
-
-    const jsonPut = await fetch(jsonApi, {
-      method: 'PUT', headers, body: JSON.stringify(jsonBody)
-    });
-
-    if (jsonPut.ok) {
-      // 낙관적 업데이트 — 화면 즉시 반영
+    if (jsonRes.ok) {
       render();
       showToast('이미지가 저장됐어요 ✅');
     } else {
-      showToast(`이미지 정보 저장 실패 (${jsonPut.status})`);
+      showToast(`이미지 정보 저장 실패 (${jsonRes.status})`);
     }
-
-  } catch (e) {
+  } catch(e) {
     showToast('저장 실패 — 네트워크를 확인해주세요');
     console.error(e);
   }
 }
+
 
 
 /* ══════════════════════════════════════════════════
