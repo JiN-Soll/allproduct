@@ -474,32 +474,57 @@ async function loadImgData(){
 }
 
 /* ══════════════════════════════════════════════════
-   이미지 수정 (관리자) — GitHub API로 images.json 업데이트
+   이미지 수정 (관리자) — PC 파일 업로드 방식
+   파일 → base64 → GitHub API로 images/ 폴더에 저장
+   → images.json 업데이트
 ══════════════════════════════════════════════════ */
-async function editImage(productName){
-  if(!isAdmin())return;
-  const key=pkey(productName);
-  const current=imgData[key]||'';
-  const newUrl=prompt(`"${productName}"\n이미지 URL을 입력하세요\n(비우고 확인하면 삭제)`,current);
-  if(newUrl===null)return; // 취소
+function editImage(productName) {
+  if (!isAdmin()) return;
 
-  // 낙관적 업데이트 — 즉시 화면 반영
-  if(newUrl.trim()){
-    imgData[key]=newUrl.trim();
-  }else{
-    delete imgData[key];
-  }
-  render();
-  showToast('저장 중…');
+  // 숨겨진 파일 input 만들어서 클릭
+  const input = document.createElement('input');
+  input.type = 'file';
+  input.accept = 'image/*';
+  input.onchange = async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
 
-  // GitHub에 커밋
-  await commitImgData(productName, newUrl.trim());
+    // 파일 크기 체크 (5MB 이하)
+    if (file.size > 5 * 1024 * 1024) {
+      showToast('파일이 너무 커요 — 5MB 이하로 해주세요');
+      return;
+    }
+
+    showToast('업로드 중… ⏳');
+
+    // 파일 → base64
+    const base64 = await fileToBase64(file);
+
+    // GitHub에 이미지 파일 저장 후 images.json 업데이트
+    await uploadImageFile(productName, file.name, base64);
+  };
+  input.click();
 }
 
-async function commitImgData(productName, newUrl){
-  let token=localStorage.getItem(GH_PAT_KEY);
-  if(!token){
-    token=prompt(
+// File → base64 (data:image/... 접두사 제거)
+function fileToBase64(file) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => {
+      // "data:image/jpeg;base64,XXXXXX" 에서 XXXXXX 부분만 추출
+      const b64 = reader.result.split(',')[1];
+      resolve(b64);
+    };
+    reader.onerror = reject;
+    reader.readAsDataURL(file);
+  });
+}
+
+// GitHub에 이미지 파일 업로드 + images.json 업데이트
+async function uploadImageFile(productName, fileName, base64Content) {
+  let token = localStorage.getItem(GH_PAT_KEY);
+  if (!token) {
+    token = prompt(
       'GitHub 토큰을 입력하세요.\n\n' +
       '① github.com → Settings → Developer settings\n' +
       '② Fine-grained tokens → Generate new token\n' +
@@ -508,64 +533,102 @@ async function commitImgData(productName, newUrl){
       '⑤ 생성된 토큰을 여기 붙여넣기\n\n' +
       '(브라우저에만 저장, 외부 전송 없음)'
     );
-    if(!token)return;
-    token=token.trim();
-    localStorage.setItem(GH_PAT_KEY,token);
+    if (!token) return;
+    token = token.trim();
+    localStorage.setItem(GH_PAT_KEY, token);
   }
 
-  const api=`https://api.github.com/repos/${GH_OWNER}/${GH_REPO}/contents/${GH_IMG_PATH}`;
-  const headers={
-    'Authorization':'Bearer '+token,
-    'Accept':'application/vnd.github+json',
-    'X-GitHub-Api-Version':'2022-11-28',
-    'Content-Type':'application/json',
+  const headers = {
+    'Authorization': 'Bearer ' + token,
+    'Accept': 'application/vnd.github+json',
+    'X-GitHub-Api-Version': '2022-11-28',
+    'Content-Type': 'application/json',
   };
 
-  try{
-    // 현재 파일 SHA 가져오기
-    let sha=null;
-    const getRes=await fetch(api+'?ref=main',{headers});
-    if(getRes.ok){
-      const j=await getRes.json();
-      sha=j.sha;
-    }else if(getRes.status!==404){
-      if(getRes.status===401||getRes.status===403){
+  try {
+    // ── 1단계: 이미지 파일을 images/ 폴더에 업로드 ──
+    // 파일명: 상품명을 영문/숫자로 정리 + 원본 확장자
+    const ext = fileName.split('.').pop().toLowerCase() || 'jpg';
+    const safeName = pkey(productName).replace(/[^a-z0-9가-힣]/g, '_').slice(0, 60);
+    const imgPath = `images/${safeName}.${ext}`;
+    const imgApi = `https://api.github.com/repos/${GH_OWNER}/${GH_REPO}/contents/${imgPath}`;
+
+    // 기존 파일 SHA 확인 (덮어쓰기용)
+    let imgSha = null;
+    const chkRes = await fetch(imgApi + '?ref=main', { headers });
+    if (chkRes.ok) {
+      const chkJ = await chkRes.json();
+      imgSha = chkJ.sha;
+    }
+
+    const imgBody = {
+      message: `관리자: "${productName}" 이미지 업로드`,
+      content: base64Content,
+      branch: 'main',
+    };
+    if (imgSha) imgBody.sha = imgSha;
+
+    const imgPut = await fetch(imgApi, {
+      method: 'PUT', headers, body: JSON.stringify(imgBody)
+    });
+
+    if (!imgPut.ok) {
+      const errJ = await imgPut.json().catch(() => ({}));
+      if (imgPut.status === 401 || imgPut.status === 403) {
         localStorage.removeItem(GH_PAT_KEY);
         showToast('토큰이 유효하지 않아요 — 다시 입력해주세요');
-      }else{
-        showToast('저장 실패 ('+getRes.status+')');
+      } else {
+        showToast(`이미지 업로드 실패 (${imgPut.status}): ${errJ.message || ''}`);
       }
       return;
     }
 
-    // JSON 직렬화 & base64 인코딩
-    const content=btoa(unescape(encodeURIComponent(
-      JSON.stringify(imgData,null,2)
+    // 업로드된 이미지의 raw URL
+    const rawImgUrl = `https://raw.githubusercontent.com/${GH_OWNER}/${GH_REPO}/main/${imgPath}`;
+
+    // ── 2단계: images.json 업데이트 ──
+    const key = pkey(productName);
+    imgData[key] = rawImgUrl;
+
+    const jsonApi = `https://api.github.com/repos/${GH_OWNER}/${GH_REPO}/contents/${GH_IMG_PATH}`;
+
+    // 기존 images.json SHA 확인
+    let jsonSha = null;
+    const jsonGet = await fetch(jsonApi + '?ref=main', { headers });
+    if (jsonGet.ok) {
+      const jsonJ = await jsonGet.json();
+      jsonSha = jsonJ.sha;
+    }
+
+    const jsonContent = btoa(unescape(encodeURIComponent(
+      JSON.stringify(imgData, null, 2)
     )));
 
-    const body={
-      message:`관리자: "${productName}" 이미지 ${newUrl?'등록':'삭제'}`,
-      content,
-      branch:'main',
+    const jsonBody = {
+      message: `관리자: "${productName}" 이미지 등록`,
+      content: jsonContent,
+      branch: 'main',
     };
-    if(sha)body.sha=sha;
+    if (jsonSha) jsonBody.sha = jsonSha;
 
-    const putRes=await fetch(api,{
-      method:'PUT',headers,body:JSON.stringify(body)
+    const jsonPut = await fetch(jsonApi, {
+      method: 'PUT', headers, body: JSON.stringify(jsonBody)
     });
 
-    if(putRes.ok){
-      showToast(newUrl?'이미지가 저장됐어요 ✅':'이미지를 삭제했어요');
-    }else if(putRes.status===401||putRes.status===403){
-      localStorage.removeItem(GH_PAT_KEY);
-      showToast('토큰이 유효하지 않아요 — 다시 입력해주세요');
-    }else{
-      showToast('저장 실패 ('+putRes.status+')');
+    if (jsonPut.ok) {
+      // 낙관적 업데이트 — 화면 즉시 반영
+      render();
+      showToast('이미지가 저장됐어요 ✅');
+    } else {
+      showToast(`이미지 정보 저장 실패 (${jsonPut.status})`);
     }
-  }catch(e){
+
+  } catch (e) {
     showToast('저장 실패 — 네트워크를 확인해주세요');
+    console.error(e);
   }
 }
+
 
 /* ══════════════════════════════════════════════════
    이미지 썸네일 URL
