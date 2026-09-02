@@ -1,1163 +1,233 @@
-<!DOCTYPE html>
-<html lang="ko">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>마스터 유통 상품 카탈로그</title>
-<style>
-/* ── 리셋 & 기본 ── */
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-:root {
-  --white: #ffffff;
-  --bg: #f5f6f8;
-  --bg2: #eef0f4;
-  --border: #e2e5ea;
-  --border2: #d0d4db;
-  --ink: #1a1d23;
-  --ink2: #4a5060;
-  --ink3: #8a9099;
-  --accent: #3b6ef8;
-  --accent-light: #eef2ff;
-  --accent2: #f0f4ff;
-  --tag-bg: #f0f2f5;
-  --free: #12a05c;
-  --daily: #e85c3a;
-  --radius: 14px;
-  --shadow: 0 2px 12px rgba(0,0,0,.07);
-  --shadow-lg: 0 8px 32px rgba(0,0,0,.10);
-}
-body {
-  background: var(--bg);
-  color: var(--ink);
-  font-family: -apple-system, 'Apple SD Gothic Neo', 'Malgun Gothic', 'Noto Sans KR', sans-serif;
-  line-height: 1.5;
-  -webkit-font-smoothing: antialiased;
-  padding-bottom: 80px;
-}
-button { font-family: inherit; cursor: pointer; }
-a { color: inherit; text-decoration: none; }
-:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+// ── 여기에만 입력하세요 ──────────────────
+const LOGIN_ID  = 'solyj96';
+const LOGIN_PWD = '여기에_새_비밀번호_입력'; // ← 변경 후 새 비밀번호
+// ────────────────────────────────────────
 
-/* ── 헤더 ── */
-.site-header {
-  background: var(--white);
-  border-bottom: 1px solid var(--border);
-  position: sticky;
-  top: 0;
-  z-index: 50;
-  box-shadow: 0 1px 8px rgba(0,0,0,.06);
-}
-.header-inner {
-  max-width: 1400px;
-  margin: 0 auto;
-  padding: 0 28px;
-  height: 64px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 16px;
-}
-.logo {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  flex: none;
-}
-.logo-dot {
-  width: 8px; height: 8px;
-  border-radius: 50%;
-  background: var(--accent);
-  box-shadow: 0 0 0 3px rgba(59,110,248,.18);
-}
-.logo-text {
-  font-size: 17px;
-  font-weight: 800;
-  letter-spacing: -.3px;
-  color: var(--ink);
-}
-.logo-sub {
-  font-size: 11.5px;
-  color: var(--ink3);
-  font-weight: 500;
-  margin-top: 1px;
-}
-.header-search {
-  flex: 1;
-  max-width: 380px;
-  position: relative;
-}
-.header-search input {
-  width: 100%;
-  height: 40px;
-  border: 1.5px solid var(--border2);
-  border-radius: 20px;
-  padding: 0 16px 0 40px;
-  font-size: 14px;
-  font-family: inherit;
-  background: var(--bg);
-  color: var(--ink);
-  outline: none;
-  transition: border-color .15s, background .15s;
-}
-.header-search input:focus {
-  border-color: var(--accent);
-  background: var(--white);
-}
-.header-search input::placeholder { color: var(--ink3); }
-.search-icon {
-  position: absolute;
-  left: 13px;
-  top: 50%;
-  transform: translateY(-50%);
-  color: var(--ink3);
-  pointer-events: none;
-  font-size: 15px;
-}
-.header-stats {
-  display: flex;
-  gap: 20px;
-  flex: none;
-}
-.hstat {
-  text-align: right;
-}
-.hstat .v {
-  font-size: 20px;
-  font-weight: 800;
-  color: var(--accent);
-  line-height: 1;
-  font-variant-numeric: tabular-nums;
-}
-.hstat .k {
-  font-size: 10.5px;
-  color: var(--ink3);
-  letter-spacing: .06em;
-}
-@media (max-width: 700px) {
-  .header-inner { padding: 0 16px; height: 56px; }
-  .logo-sub { display: none; }
-  .header-stats { display: none; }
-  .header-search { max-width: none; }
-}
-
-/* ── 히어로 배너 ── */
-.hero {
-  background: linear-gradient(135deg, #3b6ef8 0%, #6b4ff8 100%);
-  color: #fff;
-  padding: 40px 28px 36px;
-}
-.hero-inner {
-  max-width: 1400px;
-  margin: 0 auto;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 24px;
-  flex-wrap: wrap;
-}
-.hero-text h1 {
-  font-size: 26px;
-  font-weight: 800;
-  letter-spacing: -.5px;
-  line-height: 1.3;
-}
-.hero-text p {
-  font-size: 14.5px;
-  opacity: .85;
-  margin-top: 8px;
-  line-height: 1.7;
-  max-width: 560px;
-}
-.hero-badges {
-  display: flex;
-  gap: 10px;
-  flex-wrap: wrap;
-  margin-top: 16px;
-}
-.hero-badge {
-  background: rgba(255,255,255,.18);
-  border: 1px solid rgba(255,255,255,.3);
-  border-radius: 20px;
-  padding: 5px 13px;
-  font-size: 12.5px;
-  font-weight: 600;
-  letter-spacing: -.1px;
-}
-.hero-notice {
-  background: rgba(255,255,255,.12);
-  border: 1px solid rgba(255,255,255,.22);
-  border-radius: 10px;
-  padding: 14px 18px;
-  font-size: 13px;
-  line-height: 1.7;
-  max-width: 340px;
-  flex: none;
-}
-.hero-notice b { font-weight: 700; }
-@media (max-width: 700px) {
-  .hero { padding: 28px 16px 24px; }
-  .hero-text h1 { font-size: 20px; }
-  .hero-text p { font-size: 13.5px; }
-  .hero-notice { max-width: 100%; width: 100%; }
-}
-
-/* ── 탭 네비 ── */
-.tab-bar {
-  background: var(--white);
-  border-bottom: 1px solid var(--border);
-  overflow-x: auto;
-  scrollbar-width: none;
-  -webkit-overflow-scrolling: touch;
-  position: sticky;
-  top: 64px;
-  z-index: 40;
-}
-.tab-bar::-webkit-scrollbar { display: none; }
-.tab-inner {
-  max-width: 1400px;
-  margin: 0 auto;
-  padding: 0 28px;
-  display: flex;
-  gap: 2px;
-}
-.tab-btn {
-  flex: none;
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  padding: 14px 16px;
-  font-size: 13.5px;
-  font-weight: 600;
-  color: var(--ink3);
-  background: none;
-  border: none;
-  border-bottom: 2.5px solid transparent;
-  transition: color .12s, border-color .12s;
-  white-space: nowrap;
-  position: relative;
-  top: 1px;
-}
-.tab-btn:hover { color: var(--ink2); }
-.tab-btn.active {
-  color: var(--accent);
-  border-bottom-color: var(--accent);
-}
-.tab-badge {
-  background: var(--bg2);
-  border-radius: 20px;
-  padding: 1px 7px;
-  font-size: 11px;
-  font-weight: 700;
-  color: var(--ink3);
-}
-.tab-btn.active .tab-badge {
-  background: var(--accent-light);
-  color: var(--accent);
-}
-.tab-dot-daily {
-  width: 6px; height: 6px;
-  border-radius: 50%;
-  background: var(--daily);
-  flex: none;
-}
-@media (max-width: 700px) {
-  .tab-bar { top: 56px; }
-  .tab-inner { padding: 0 12px; gap: 0; }
-  .tab-btn { padding: 12px 12px; font-size: 13px; }
-}
-
-/* ── 메인 컨텐츠 ── */
-.main-wrap {
-  max-width: 1400px;
-  margin: 0 auto;
-  padding: 28px 28px 0;
-}
-@media (max-width: 700px) { .main-wrap { padding: 16px 14px 0; } }
-
-/* ── 섹션 헤더 ── */
-.section-head {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 12px;
-  margin-bottom: 18px;
-  flex-wrap: wrap;
-}
-.section-title {
-  font-size: 20px;
-  font-weight: 800;
-  letter-spacing: -.3px;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-.section-title .dot-daily {
-  display: inline-flex;
-  align-items: center;
-  gap: 5px;
-  font-size: 12px;
-  font-weight: 700;
-  color: var(--daily);
-  background: #fff2ef;
-  border-radius: 20px;
-  padding: 3px 9px;
-}
-.section-title .dot-daily::before {
-  content: '';
-  width: 6px; height: 6px;
-  border-radius: 50%;
-  background: var(--daily);
-  display: block;
-}
-.section-meta {
-  font-size: 13px;
-  color: var(--ink3);
-  font-variant-numeric: tabular-nums;
-}
-.section-meta b { color: var(--ink2); font-weight: 700; }
-
-/* ── 정렬/필터 툴바 ── */
-.sort-bar {
-  display: flex;
-  gap: 6px;
-  margin-bottom: 18px;
-  flex-wrap: wrap;
-}
-.sort-btn {
-  border: 1.5px solid var(--border2);
-  background: var(--white);
-  color: var(--ink3);
-  border-radius: 8px;
-  padding: 7px 13px;
-  font-size: 12.5px;
-  font-weight: 600;
-  transition: .12s;
-  white-space: nowrap;
-}
-.sort-btn:hover { color: var(--ink2); border-color: var(--accent); }
-.sort-btn.on {
-  background: var(--accent);
-  border-color: var(--accent);
-  color: #fff;
-}
-
-/* ── 카드 그리드 ── */
-.card-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
-  gap: 16px;
-}
-@media (max-width: 700px) {
-  .card-grid { grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 12px; }
-}
-
-/* ── 상품 카드 ── */
-.pcard {
-  background: var(--white);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  padding: 20px;
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  transition: box-shadow .15s, transform .15s;
-  position: relative;
-}
-.pcard:hover {
-  box-shadow: var(--shadow-lg);
-  transform: translateY(-2px);
-}
-
-/* 상단: 태그들 */
-.card-tags {
-  display: flex;
-  gap: 6px;
-  flex-wrap: wrap;
-}
-.ctag {
-  font-size: 11px;
-  font-weight: 700;
-  border-radius: 6px;
-  padding: 3px 8px;
-  letter-spacing: .02em;
-}
-.ctag-wh {
-  background: var(--accent-light);
-  color: var(--accent);
-}
-.ctag-tax {
-  background: var(--tag-bg);
-  color: var(--ink3);
-}
-.ctag-daily {
-  background: #fff2ef;
-  color: var(--daily);
-}
-
-/* 상품명 */
-.card-name {
-  font-size: 15.5px;
-  font-weight: 700;
-  letter-spacing: -.2px;
-  line-height: 1.4;
-  color: var(--ink);
-  flex: 1;
-}
-
-/* 설명/특이사항 */
-.card-desc {
-  font-size: 12.5px;
-  color: var(--ink3);
-  line-height: 1.6;
-  padding-top: 10px;
-  border-top: 1px solid var(--border);
-}
-
-/* 하단 정보 */
-.card-footer {
-  display: flex;
-  align-items: flex-end;
-  justify-content: space-between;
-  gap: 10px;
-  padding-top: 12px;
-  border-top: 1px solid var(--border);
-  margin-top: auto;
-}
-.card-price {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-}
-.price-label {
-  font-size: 10.5px;
-  color: var(--ink3);
-  letter-spacing: .05em;
-  font-weight: 600;
-}
-.price-ask {
-  font-size: 15px;
-  font-weight: 800;
-  color: var(--accent);
-  letter-spacing: -.2px;
-}
-.card-ship {
-  text-align: right;
-  font-size: 12px;
-  color: var(--ink3);
-  line-height: 1.6;
-}
-.ship-free {
-  font-weight: 700;
-  color: var(--free);
-}
-.ship-paid {
-  font-weight: 700;
-  color: var(--ink2);
-  font-variant-numeric: tabular-nums;
-}
-.card-copy {
-  position: absolute;
-  top: 14px;
-  right: 14px;
-  width: 28px; height: 28px;
-  border-radius: 7px;
-  border: 1px solid var(--border);
-  background: var(--bg);
-  color: var(--ink3);
-  font-size: 13px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: .12s;
-  opacity: 0;
-}
-.pcard:hover .card-copy { opacity: 1; }
-.card-copy:hover { border-color: var(--accent); color: var(--accent); background: var(--accent-light); }
-
-/* 마감시간 배지 */
-.card-cut {
-  font-size: 11px;
-  font-weight: 700;
-  color: var(--ink3);
-  background: var(--tag-bg);
-  border-radius: 5px;
-  padding: 2px 7px;
-  white-space: nowrap;
-}
-
-/* ── 로딩 / 빈 상태 ── */
-.state-box {
-  text-align: center;
-  padding: 80px 20px;
-  color: var(--ink3);
-  font-size: 14px;
-  grid-column: 1/-1;
-}
-.state-box .state-icon { font-size: 36px; margin-bottom: 12px; }
-.state-box .state-title { font-size: 16px; font-weight: 700; color: var(--ink2); margin-bottom: 6px; }
-.spinner {
-  width: 36px; height: 36px;
-  border: 3px solid var(--border2);
-  border-top-color: var(--accent);
-  border-radius: 50%;
-  animation: spin .7s linear infinite;
-  margin: 0 auto 14px;
-}
-@keyframes spin { to { transform: rotate(360deg); } }
-.retry-btn {
-  margin-top: 14px;
-  border: 1.5px solid var(--border2);
-  background: var(--white);
-  color: var(--ink2);
-  border-radius: 8px;
-  padding: 9px 20px;
-  font-size: 13px;
-  font-weight: 700;
-}
-.retry-btn:hover { border-color: var(--accent); color: var(--accent); }
-
-/* ── 검색 결과 배너 ── */
-.search-banner {
-  background: var(--accent-light);
-  border: 1.5px solid var(--accent);
-  border-radius: 10px;
-  padding: 12px 18px;
-  font-size: 13.5px;
-  color: var(--accent);
-  font-weight: 600;
-  margin-bottom: 18px;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-.search-banner b { font-weight: 800; }
-.search-clear {
-  margin-left: auto;
-  border: 1px solid var(--accent);
-  background: var(--white);
-  color: var(--accent);
-  border-radius: 6px;
-  padding: 3px 10px;
-  font-size: 12px;
-  font-weight: 700;
-  flex: none;
-}
-
-/* ── 문의 플로팅 버튼 ── */
-.inquiry-fab {
-  position: fixed;
-  bottom: 24px;
-  right: 24px;
-  z-index: 90;
-  background: var(--accent);
-  color: #fff;
-  border: none;
-  border-radius: 28px;
-  padding: 14px 22px;
-  font-size: 14.5px;
-  font-weight: 800;
-  box-shadow: 0 8px 28px rgba(59,110,248,.38);
-  display: flex;
-  align-items: center;
-  gap: 9px;
-  transition: transform .15s, box-shadow .15s;
-  text-decoration: none;
-  cursor: pointer;
-}
-.inquiry-fab:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 14px 36px rgba(59,110,248,.45);
-}
-.inquiry-fab .fab-icon { font-size: 20px; }
-.inquiry-fab .fab-text { display: flex; flex-direction: column; gap: 0; }
-.inquiry-fab .fab-main { font-size: 14.5px; font-weight: 800; line-height: 1.2; }
-.inquiry-fab .fab-sub { font-size: 11px; opacity: .82; font-weight: 500; }
-@media (max-width: 700px) {
-  .inquiry-fab { bottom: 16px; right: 16px; padding: 12px 16px; }
-  .inquiry-fab .fab-sub { display: none; }
-}
-
-/* ── 토스트 ── */
-.toast {
-  position: fixed;
-  bottom: 80px;
-  left: 50%;
-  transform: translateX(-50%) translateY(4px);
-  background: var(--ink);
-  color: #fff;
-  padding: 9px 20px;
-  border-radius: 22px;
-  font-size: 13px;
-  font-weight: 600;
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity .2s, transform .2s;
-  z-index: 999;
-  white-space: nowrap;
-}
-.toast.show {
-  opacity: 1;
-  transform: translateX(-50%) translateY(0);
-}
-
-/* ── 푸터 ── */
-.site-footer {
-  max-width: 1400px;
-  margin: 40px auto 0;
-  padding: 20px 28px;
-  border-top: 1px solid var(--border);
-  font-size: 11.5px;
-  color: var(--ink3);
-  text-align: center;
-  line-height: 1.9;
-}
-.site-footer b { color: var(--ink2); }
-
-/* ── 카테고리 구분 칩 (창고 내) ── */
-.cat-divider {
-  font-size: 11.5px;
-  font-weight: 800;
-  color: var(--ink3);
-  letter-spacing: .1em;
-  text-transform: uppercase;
-  padding: 2px 0 14px;
-  grid-column: 1/-1;
-  border-bottom: 1px solid var(--border);
-  margin-bottom: 2px;
-  margin-top: 10px;
-}
-</style>
-</head>
-<body>
-
-<!-- ── 헤더 ── -->
-<header class="site-header">
-  <div class="header-inner">
-    <div class="logo">
-      <span class="logo-dot"></span>
-      <div>
-        <div class="logo-text">마스터 유통</div>
-        <div class="logo-sub">거래처 전용 상품 카탈로그</div>
-      </div>
-    </div>
-    <div class="header-search">
-      <span class="search-icon">🔍</span>
-      <input type="search" id="searchInput" placeholder="상품명 검색…" autocomplete="off">
-    </div>
-    <div class="header-stats">
-      <div class="hstat">
-        <div class="v" id="statItems">—</div>
-        <div class="k">전체 상품</div>
-      </div>
-      <div class="hstat">
-        <div class="v" id="statSheets">—</div>
-        <div class="k">창고 수</div>
-      </div>
-    </div>
-  </div>
-</header>
-
-<!-- ── 히어로 ── -->
-<section class="hero">
-  <div class="hero-inner">
-    <div class="hero-text">
-      <h1>전국 산지 직수매<br>농·축·수산물 카탈로그</h1>
-      <p>전국 산지 어판장에서 직접 수매하고, 자체 창고를 운영하며 빠르게 대응합니다.<br>
-      상시 300~500여 가지 이상 취급하며 소량 1건도 택배 납품 가능합니다.</p>
-      <div class="hero-badges">
-        <span class="hero-badge">🏪 자체 창고 운영</span>
-        <span class="hero-badge">🚚 소량 즉시 납품</span>
-        <span class="hero-badge">🌊 산지 직수매</span>
-        <span class="hero-badge">📦 전국 배송</span>
-      </div>
-    </div>
-    <div class="hero-notice">
-      <b>📦 합포장 안내</b><br>
-      합배송은 <b>같은 창고 상품끼리만</b> 가능합니다.<br>
-      서로 다른 창고 상품은 배송비가 각각 부과됩니다.<br><br>
-      <b>💬 가격 문의</b><br>
-      공급가는 거래처 별도 문의로 안내드립니다.
-    </div>
-  </div>
-</section>
-
-<!-- ── 탭 바 ── -->
-<nav class="tab-bar" id="tabBar">
-  <div class="tab-inner" id="tabInner">
-    <!-- JS로 생성 -->
-  </div>
-</nav>
-
-<!-- ── 메인 ── -->
-<main class="main-wrap" id="mainWrap">
-  <div class="card-grid">
-    <div class="state-box">
-      <div class="spinner"></div>
-      <div class="state-title">상품을 불러오는 중입니다</div>
-      <div>잠시만 기다려 주세요…</div>
-    </div>
-  </div>
-</main>
-
-<!-- ── 푸터 ── -->
-<footer class="site-footer" id="siteFooter">
-  <b>마스터 유통</b> · 거래처 전용 상품 카탈로그<br>
-  공급가는 별도 문의로 안내드립니다 · 가격 및 재고는 변동될 수 있습니다
-</footer>
-
-<!-- ── 문의 FAB ── -->
-<a class="inquiry-fab" href="https://open.kakao.com/o/sN0ggZzi" target="_blank" rel="noopener" aria-label="카카오톡 문의">
-  <span class="fab-icon">💬</span>
-  <span class="fab-text">
-    <span class="fab-main">가격 문의하기</span>
-    <span class="fab-sub">카카오톡 상담</span>
-  </span>
-</a>
-
-<!-- ── 토스트 ── -->
-<div class="toast" id="toast"></div>
-
-<script>
-/* ════════════════════════════════════════════════════════
-   설정
-════════════════════════════════════════════════════════ */
-const SHEET_ID = '1A3XefBGLjieVeuBuhhqHixDhrQDQ7mvj3ccz-6jy8-I';
-
-// 시트 이름 목록 (탭 순서)
-const SHEETS = [
-  { name: '당일생물', label: '당일생물', daily: true },
-  { name: '경기',     label: '경기'   },
-  { name: '군산',     label: '군산'   },
-  { name: '동해',     label: '동해'   },
-  { name: '인천',     label: '인천'   },
-  { name: '마진',     label: '마진'   },
-  { name: '충무',     label: '충무'   },
-  { name: '생고',     label: '생고'   },
-  { name: '팡팡',     label: '팡팡'   },
-  { name: '키트',     label: '키트'   },
-  { name: '떡',       label: '떡'     },
-  { name: '북구',     label: '북구'   },
-  { name: '부산',     label: '부산'   },
-  { name: '찐한국',   label: '찐한국' },
-  { name: '김포',     label: '김포'   },
-  { name: '단독(유로)', label: '단독유료' },
-  { name: '단독(무료)', label: '단독무료' },
-  { name: '단독(선물)', label: '단독선물' },
+const SHOP_URL  = 'https://masterc.kr';
+const TARGET_SHEETS = [
+  '당일생물','경기','군산','동해','인천','마진',
+  '충무','생고','팡팡','키트','떡','북구',
+  '부산','찐한국','김포','단독(유로)','단독(무료)','단독(선물)'
 ];
+const NAME_COL  = 3;  // C열: 상품명
+const LINK_COL  = 11; // K열: 링크URL (이미 채워져 있음)
+const IMG_COL   = 12; // L열: 이미지URL (새로 채울 곳)
 
-/* ════════════════════════════════════════════════════════
-   상태
-════════════════════════════════════════════════════════ */
-let allData   = {};   // { 시트명: [상품 배열] }
-let activeTab = null; // 현재 탭 시트명
-let searchQ   = '';
-let sortMode  = 'sheet'; // sheet | name | ship
-let loaded    = new Set();
-let loading   = new Set();
+// ── 메인 실행 함수 ───────────────────────
+function extractImages() {
+  const ss = SpreadsheetApp.getActiveSpreadsheet();
 
-/* ════════════════════════════════════════════════════════
-   유틸
-════════════════════════════════════════════════════════ */
-const $ = id => document.getElementById(id);
-function esc(s) {
-  return String(s == null ? '' : s)
-    .replace(/&/g,'&').replace(/</g,'<')
-    .replace(/>/g,'>').replace(/"/g,'"');
-}
-function toast(msg) {
-  const t = $('toast');
-  t.textContent = msg;
-  t.classList.add('show');
-  clearTimeout(t._tid);
-  t._tid = setTimeout(() => t.classList.remove('show'), 1900);
-}
-
-/* ════════════════════════════════════════════════════════
-   CSV 파싱 (RFC 4180 기본 지원)
-════════════════════════════════════════════════════════ */
-function parseCSV(text) {
-  const rows = [];
-  let row = [], cell = '', inQ = false;
-  for (let i = 0; i < text.length; i++) {
-    const c = text[i], n = text[i+1];
-    if (inQ) {
-      if (c === '"' && n === '"') { cell += '"'; i++; }
-      else if (c === '"')         { inQ = false; }
-      else                        { cell += c; }
-    } else {
-      if (c === '"')              { inQ = true; }
-      else if (c === ',')         { row.push(cell.trim()); cell = ''; }
-      else if (c === '\n' || (c === '\r' && n === '\n')) {
-        if (c === '\r') i++;
-        row.push(cell.trim()); rows.push(row); row = []; cell = '';
-      } else { cell += c; }
-    }
-  }
-  if (cell || row.length) { row.push(cell.trim()); rows.push(row); }
-  return rows;
-}
-
-/* ════════════════════════════════════════════════════════
-   데이터 fetch & 파싱
-════════════════════════════════════════════════════════ */
-async function fetchSheet(sheetName) {
-  const url = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv&sheet=${encodeURIComponent(sheetName)}`;
-  const res = await fetch(url);
-  if (!res.ok) throw new Error(res.status);
-  const text = await res.text();
-  const rows = parseCSV(text);
-
-  const products = [];
-
-  // 헤더 행 찾기: 창고명 컬럼이 있는 행
-  let headerIdx = -1;
-  for (let i = 0; i < Math.min(rows.length, 4); i++) {
-    if (rows[i].some(c => c.includes('창고명') || c === '창고명 ')) {
-      headerIdx = i; break;
-    }
-  }
-  if (headerIdx < 0) headerIdx = 0;
-
-  // 컬럼 인덱스 파악
-  const hdr = rows[headerIdx];
-  const idx = {
-    wh:   hdr.findIndex(c => c.includes('창고명')),
-    name: hdr.findIndex(c => c.includes('상품명')),
-    price:hdr.findIndex(c => c.includes('공급가')),
-    ship: hdr.findIndex(c => c.includes('택배비')),
-    tax:  hdr.findIndex(c => c.includes('면과세') || c.includes('면과세')),
-    cut:  hdr.findIndex(c => c.includes('발주마감')),
-    note: hdr.findIndex(c => c.includes('특이사항')),
-    exp:  hdr.findIndex(c => c.includes('유통기한')),
-    courier: hdr.findIndex(c => c.includes('택배사')),
-  };
-  // fallback: 당일생물 시트는 컬럼 순서가 다를 수 있음
-  if (idx.wh < 0) idx.wh = 1;
-  if (idx.name < 0) idx.name = 2;
-  if (idx.price < 0) idx.price = 3;
-
-  for (let i = headerIdx + 1; i < rows.length; i++) {
-    const r = rows[i];
-    if (!r || r.length < 2) continue;
-    const name = (idx.name >= 0 ? r[idx.name] : r[2] || '').replace(/\s+/g,' ').trim();
-    if (!name || name.includes('상품명') || name.includes('창고')) continue;
-    // 빈 행 / 구분 행 스킵
-    if (name.length < 2) continue;
-
-    const wh      = (idx.wh >= 0 ? r[idx.wh] : r[1] || '').trim();
-    const shipRaw = (idx.ship >= 0 ? r[idx.ship] : '').trim();
-    const isFree  = /무료|0/.test(shipRaw);
-    const shipNum = isFree ? 0 : parseInt(shipRaw.replace(/[^\d]/g,''),10) || 0;
-    const note    = (idx.note >= 0 ? r[idx.note] : '').trim();
-    const exp     = (idx.exp >= 0 ? r[idx.exp] : '').trim();
-    const cut     = (idx.cut >= 0 ? r[idx.cut] : '').trim();
-    const courier = (idx.courier >= 0 ? r[idx.courier] : '').trim();
-    const tax     = (idx.tax >= 0 ? r[idx.tax] : '').trim();
-
-    // 설명: 특이사항 + 유통기한
-    const descParts = [];
-    if (note && note !== '-') descParts.push(note);
-    if (exp && exp !== '-') descParts.push('유통기한 ' + exp);
-
-    products.push({ wh, name, ship: shipNum, isFree, courier, tax, cut, desc: descParts.join(' · ') });
-  }
-  return products;
-}
-
-/* ════════════════════════════════════════════════════════
-   탭 빌드
-════════════════════════════════════════════════════════ */
-function buildTabs() {
-  const inner = $('tabInner');
-  inner.innerHTML = '';
-  SHEETS.forEach(s => {
-    const btn = document.createElement('button');
-    btn.className = 'tab-btn' + (s.name === activeTab ? ' active' : '');
-    btn.dataset.sheet = s.name;
-    const countLoaded = (allData[s.name] || []).length;
-    btn.innerHTML =
-      (s.daily ? '<span class="tab-dot-daily"></span>' : '') +
-      esc(s.label) +
-      `<span class="tab-badge" id="badge-${esc(s.name)}">${loaded.has(s.name) ? countLoaded : '…'}</span>`;
-    btn.onclick = () => switchTab(s.name);
-    inner.appendChild(btn);
-  });
-}
-
-function updateBadge(sheetName) {
-  const el = document.getElementById(`badge-${sheetName}`);
-  if (el) el.textContent = (allData[sheetName] || []).length;
-}
-
-/* ════════════════════════════════════════════════════════
-   탭 전환
-════════════════════════════════════════════════════════ */
-async function switchTab(name) {
-  activeTab = name;
-  sortMode = 'sheet';
-  buildTabs();
-  render();
-
-  // 아직 안 로드된 시트면 fetch
-  if (!loaded.has(name) && !loading.has(name)) {
-    loading.add(name);
-    try {
-      allData[name] = await fetchSheet(name);
-      loaded.add(name);
-      updateBadge(name);
-      updateStats();
-      if (activeTab === name) render(); // 현재 탭이면 다시 그림
-    } catch (e) {
-      if (activeTab === name) renderError(name, e);
-    } finally {
-      loading.delete(name);
-    }
-  }
-}
-
-/* ════════════════════════════════════════════════════════
-   렌더링
-════════════════════════════════════════════════════════ */
-function getDisplayList() {
-  if (searchQ) {
-    // 전체 검색
-    let list = [];
-    SHEETS.forEach(s => {
-      (allData[s.name] || []).forEach(p => {
-        if (p.name.toLowerCase().includes(searchQ)) {
-          list.push({ ...p, _sheet: s.name, _label: s.label });
-        }
-      });
-    });
-    return { mode: 'search', list };
-  }
-  if (!activeTab) return { mode: 'tab', list: [] };
-  const list = (allData[activeTab] || []).map(p => ({ ...p, _sheet: activeTab }));
-  return { mode: 'tab', list };
-}
-
-function sortList(list) {
-  if (sortMode === 'name') return [...list].sort((a,b) => a.name.localeCompare(b.name,'ko'));
-  if (sortMode === 'ship-free') return [...list].sort((a,b) => (a.isFree?0:1) - (b.isFree?0:1));
-  if (sortMode === 'ship-asc') return [...list].sort((a,b) => a.ship - b.ship);
-  return list; // sheet 순서 유지
-}
-
-function render() {
-  const wrap = $('mainWrap');
-
-  const { mode, list } = getDisplayList();
-  const sheetInfo = SHEETS.find(s => s.name === activeTab);
-
-  // 로딩 중 표시
-  if (!searchQ && activeTab && loading.has(activeTab)) {
-    wrap.innerHTML = `
-      <div class="card-grid">
-        <div class="state-box">
-          <div class="spinner"></div>
-          <div class="state-title">불러오는 중…</div>
-        </div>
-      </div>`;
+  // 1. 로그인 쿠키 획득
+  Logger.log('로그인 시도 중...');
+  const cookie = login();
+  if (!cookie) {
+    Browser.msgBox('❌ 로그인 실패\n아이디/비밀번호를 확인하세요');
     return;
   }
+  Logger.log('로그인 성공!');
 
-  const sorted = sortList(list);
+  let totalFound = 0;
+  let totalProcessed = 0;
 
-  let html = '';
+  for (const sheetName of TARGET_SHEETS) {
+    const sheet = ss.getSheetByName(sheetName);
+    if (!sheet) { Logger.log('시트 없음: ' + sheetName); continue; }
 
-  // 검색 배너
-  if (searchQ) {
-    html += `
-      <div class="search-banner">
-        🔍 <b>"${esc(searchQ)}"</b> 검색 결과 · ${sorted.length}개 상품
-        <button class="search-clear" onclick="clearSearch()">✕ 검색 지우기</button>
-      </div>`;
-  } else {
-    // 섹션 헤더
-    const ship = sorted.length ? Math.max(...sorted.map(p=>p.ship).filter(v=>v>0), 0) : 0;
-    const freeCount = sorted.filter(p=>p.isFree).length;
-    html += `
-      <div class="section-head">
-        <div class="section-title">
-          ${sheetInfo && sheetInfo.daily ? '<span class="dot-daily">당일한정</span>' : ''}
-          ${esc(sheetInfo ? sheetInfo.label : '')} 창고
-        </div>
-        <div class="section-meta">
-          <b>${sorted.length}</b>개 상품
-          ${ship > 0 ? `· 기본 배송비 <b>${ship.toLocaleString()}원</b>` : ''}
-          ${freeCount > 0 ? `· 무료배송 <b>${freeCount}</b>건` : ''}
-        </div>
-      </div>
-      <div class="sort-bar">
-        <button class="sort-btn ${sortMode==='sheet'?'on':''}" onclick="setSort('sheet')">기본순</button>
-        <button class="sort-btn ${sortMode==='name'?'on':''}" onclick="setSort('name')">이름순</button>
-        <button class="sort-btn ${sortMode==='ship-free'?'on':''}" onclick="setSort('ship-free')">무료배송 먼저</button>
-        <button class="sort-btn ${sortMode==='ship-asc'?'on':''}" onclick="setSort('ship-asc')">배송비 낮은순</button>
-      </div>`;
-  }
+    const lastRow = sheet.getLastRow();
 
-  html += '<div class="card-grid">';
-
-  if (sorted.length === 0 && !loading.has(activeTab)) {
-    if (searchQ) {
-      html += `<div class="state-box"><div class="state-icon">🔍</div><div class="state-title">검색 결과가 없습니다</div><div>"${esc(searchQ)}"에 해당하는 상품이 없어요</div></div>`;
-    } else if (!loaded.has(activeTab)) {
-      html += `<div class="state-box"><div class="spinner"></div><div class="state-title">불러오는 중…</div></div>`;
-    } else {
-      html += `<div class="state-box"><div class="state-icon">📦</div><div class="state-title">상품이 없습니다</div></div>`;
+    // 헤더 행 찾기
+    let headerRow = 1;
+    for (let r = 1; r <= Math.min(5, lastRow); r++) {
+      if (String(sheet.getRange(r, NAME_COL).getValue()).includes('상품명')) {
+        headerRow = r; break;
+      }
     }
-  }
 
-  sorted.forEach(p => {
-    html += cardHtml(p);
-  });
+    // L열 헤더
+    sheet.getRange(headerRow, IMG_COL).setValue('이미지URL');
+    sheet.getRange(headerRow, IMG_COL).setFontWeight('bold').setBackground('#fce8e6');
 
-  html += '</div>';
-  wrap.innerHTML = html;
-}
+    let sheetFound = 0;
+    for (let r = headerRow + 1; r <= lastRow; r++) {
+      const name    = String(sheet.getRange(r, NAME_COL).getValue()).trim();
+      const linkUrl = String(sheet.getRange(r, LINK_COL).getValue()).trim();
 
-function cardHtml(p) {
-  const whLabel = p._label || (SHEETS.find(s=>s.name===p._sheet)||{}).label || p.wh || p._sheet || '';
-  const showWh  = !!(searchQ); // 검색 모드에선 창고명 태그 표시
+      if (!name || name.length < 2 || name.includes('상품명')) continue;
+      if (!linkUrl || !linkUrl.startsWith('http')) continue;
 
-  const tags = [];
-  if (showWh && whLabel) tags.push(`<span class="ctag ctag-wh">${esc(whLabel)}</span>`);
-  else if (p.wh && p.wh !== activeTab) tags.push(`<span class="ctag ctag-wh">${esc(p.wh)}</span>`);
-  if (p.tax) tags.push(`<span class="ctag ctag-tax">${esc(p.tax)}</span>`);
+      totalProcessed++;
 
-  const shipHtml = p.isFree
-    ? '<span class="ship-free">무료배송</span>'
-    : (p.ship > 0
-      ? `<span class="ship-paid">${p.ship.toLocaleString()}원</span>`
-      : '<span style="color:var(--ink3)">—</span>');
+      // 상품 페이지에서 이미지 URL 추출
+      const imgUrl = getProductImage(linkUrl, cookie);
+      if (imgUrl) {
+        sheet.getRange(r, IMG_COL).setValue(imgUrl);
+        sheetFound++;
+        totalFound++;
+        Logger.log(`[${sheetName}] ${name} → ${imgUrl}`);
+      } else {
+        Logger.log(`[${sheetName}] ${name} → 이미지 없음`);
+      }
 
-  const courierShort = p.courier ? p.courier.split('/')[0].replace('씨제이대한통운','CJ').replace('우체국택배','우체국').replace('롯데택배','롯데') : '';
-
-  return `
-    <article class="pcard">
-      <button class="card-copy" title="상품명 복사" onclick="copyName(event,'${esc(p.name)}')">📋</button>
-      ${tags.length ? `<div class="card-tags">${tags.join('')}</div>` : ''}
-      <div class="card-name">${esc(p.name)}</div>
-      ${p.desc ? `<div class="card-desc">${esc(p.desc)}</div>` : ''}
-      <div class="card-footer">
-        <div class="card-price">
-          <span class="price-label">공급가</span>
-          <span class="price-ask">별도 문의</span>
-        </div>
-        <div>
-          <div class="card-ship">
-            ${courierShort ? `<span style="font-size:11px;color:var(--ink3)">${esc(courierShort)}</span><br>` : ''}
-            ${shipHtml}
-          </div>
-          ${p.cut ? `<div style="text-align:right;margin-top:5px"><span class="card-cut">${esc(p.cut.replace('연장마감 : ','').replace('오후마감 : ','').replace('오전마감 : ','').replace('익일마감 : ',''))}</span></div>` : ''}
-        </div>
-      </div>
-    </article>`;
-}
-
-function renderError(name, err) {
-  if (activeTab !== name) return;
-  $('mainWrap').innerHTML = `
-    <div class="card-grid">
-      <div class="state-box">
-        <div class="state-icon">⚠️</div>
-        <div class="state-title">불러오지 못했습니다</div>
-        <div style="color:var(--ink3);font-size:12px;margin-top:4px">${esc(String(err))}</div>
-        <button class="retry-btn" onclick="retryTab('${esc(name)}')">다시 시도</button>
-      </div>
-    </div>`;
-}
-
-/* ════════════════════════════════════════════════════════
-   이벤트 핸들러
-════════════════════════════════════════════════════════ */
-function setSort(mode) {
-  sortMode = mode;
-  render();
-}
-
-function clearSearch() {
-  $('searchInput').value = '';
-  searchQ = '';
-  render();
-}
-
-function copyName(e, name) {
-  e.stopPropagation();
-  navigator.clipboard.writeText(name).then(() => toast('상품명이 복사됐어요'));
-}
-
-function retryTab(name) {
-  loaded.delete(name);
-  loading.delete(name);
-  switchTab(name);
-}
-
-$('searchInput').addEventListener('input', e => {
-  searchQ = e.target.value.trim().toLowerCase();
-  render();
-  // 검색 중엔 아직 안 로드된 시트들도 백그라운드에서 로드
-  if (searchQ) loadAllSheets();
-});
-
-/* ════════════════════════════════════════════════════════
-   전체 통계 업데이트
-════════════════════════════════════════════════════════ */
-function updateStats() {
-  let total = 0;
-  Object.values(allData).forEach(arr => total += arr.length);
-  $('statItems').textContent = total.toLocaleString();
-  $('statSheets').textContent = loaded.size;
-}
-
-/* ════════════════════════════════════════════════════════
-   전체 시트 백그라운드 로드 (검색 대응)
-════════════════════════════════════════════════════════ */
-async function loadAllSheets() {
-  for (const s of SHEETS) {
-    if (loaded.has(s.name) || loading.has(s.name)) continue;
-    loading.add(s.name);
-    try {
-      allData[s.name] = await fetchSheet(s.name);
-      loaded.add(s.name);
-      updateBadge(s.name);
-      updateStats();
-      if (searchQ) render(); // 검색 중이면 결과 갱신
-    } catch (e) {
-      // 백그라운드 실패는 조용히
-    } finally {
-      loading.delete(s.name);
+      // 과부하 방지 (0.3초 딜레이)
+      Utilities.sleep(300);
     }
+
+    Logger.log(`[${sheetName}] 완료: ${sheetFound}개`);
+    sheet.autoResizeColumn(IMG_COL);
   }
+
+  Browser.msgBox(
+    '완료!',
+    `총 ${totalProcessed}개 상품 처리\n이미지 ${totalFound}개 추출 완료\n\nL열(이미지URL)을 확인하세요`,
+    SpreadsheetApp.getUi().ButtonSet.OK
+  );
 }
 
-/* ════════════════════════════════════════════════════════
-   초기화
-════════════════════════════════════════════════════════ */
-(async () => {
-  // 첫 탭(당일생물) 먼저 로드
-  activeTab = SHEETS[0].name;
-  buildTabs();
-
-  // 첫 탭 fetch
-  loading.add(activeTab);
-  render(); // 로딩 스피너
+// ── 로그인 → 쿠키 반환 ──────────────────
+function login() {
   try {
-    allData[activeTab] = await fetchSheet(activeTab);
-    loaded.add(activeTab);
-    updateBadge(activeTab);
-    updateStats();
-  } catch(e) {
-    renderError(activeTab, e);
-  } finally {
-    loading.delete(activeTab);
-  }
-  render();
-  buildTabs();
+    // 1단계: 로그인 폼 GET (토큰/세션 획득)
+    const loginPageRes = UrlFetchApp.fetch(SHOP_URL + '/member/login.html', {
+      method: 'GET',
+      followRedirects: true,
+      muteHttpExceptions: true
+    });
+    const cookies = extractCookies(loginPageRes);
 
-  // 나머지 시트 순차 백그라운드 로드
-  loadAllSheets();
-})();
-</script>
-</body>
-</html>
+    // 2단계: 로그인 POST
+    const payload = {
+      'member_id'  : LOGIN_ID,
+      'member_passwd': LOGIN_PWD,
+      'action'     : 'login',
+    };
+    const loginRes = UrlFetchApp.fetch(SHOP_URL + '/member/login.html', {
+      method: 'POST',
+      payload: payload,
+      headers: { 'Cookie': cookies },
+      followRedirects: false,
+      muteHttpExceptions: true
+    });
+
+    // 로그인 후 쿠키 합치기
+    const allCookies = mergeCookies(cookies, extractCookies(loginRes));
+
+    // 로그인 성공 확인 (마이페이지 접근)
+    const checkRes = UrlFetchApp.fetch(SHOP_URL + '/myshop/index.html', {
+      method: 'GET',
+      headers: { 'Cookie': allCookies },
+      followRedirects: true,
+      muteHttpExceptions: true
+    });
+    const checkBody = checkRes.getContentText('UTF-8');
+
+    // 로그인 성공 시 마이페이지에 아이디가 보임
+    if (checkBody.includes(LOGIN_ID) || checkBody.includes('로그아웃') || checkBody.includes('mypage')) {
+      return allCookies;
+    }
+
+    Logger.log('로그인 실패 - 응답: ' + checkBody.substring(0, 300));
+    return null;
+  } catch(e) {
+    Logger.log('로그인 오류: ' + e);
+    return null;
+  }
+}
+
+// ── 상품 페이지에서 대표 이미지 URL 추출 ──
+function getProductImage(productUrl, cookie) {
+  try {
+    const res = UrlFetchApp.fetch(productUrl, {
+      method: 'GET',
+      headers: {
+        'Cookie': cookie,
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'
+      },
+      followRedirects: true,
+      muteHttpExceptions: true
+    });
+    const html = res.getContentText('UTF-8');
+
+    // 카페24 표준 상품 이미지 패턴들 (우선순위 순)
+    const patterns = [
+      // 1) og:image 메타태그 (가장 깔끔한 대표 이미지)
+      /<meta[^>]+property=["']og:image["'][^>]+content=["']([^"']+)["']/i,
+      /<meta[^>]+content=["']([^"']+)["'][^>]+property=["']og:image["']/i,
+      // 2) 카페24 상품 상세 이미지
+      /["']([^"']*\/web\/product\/big\/[^"']+\.(jpg|jpeg|png|webp))["']/i,
+      /["']([^"']*\/web\/product\/medium\/[^"']+\.(jpg|jpeg|png|webp))["']/i,
+      // 3) 상품 이미지 클래스
+      /class=["'][^"']*keyImg[^"']*["'][^>]*src=["']([^"']+)["']/i,
+      /id=["']productImage["'][^>]*src=["']([^"']+)["']/i,
+      // 4) 일반 상품 이미지 패턴
+      /["']([^"']*masterc[^"']*\.(jpg|jpeg|png|webp))["']/i,
+    ];
+
+    for (const pattern of patterns) {
+      const match = html.match(pattern);
+      if (match) {
+        let url = match[1];
+        // 상대경로 → 절대경로
+        if (url.startsWith('//')) url = 'https:' + url;
+        else if (url.startsWith('/')) url = SHOP_URL + url;
+        return url;
+      }
+    }
+
+    Logger.log('이미지 패턴 없음: ' + productUrl);
+    return null;
+  } catch(e) {
+    Logger.log('이미지 추출 오류: ' + productUrl + ' / ' + e);
+    return null;
+  }
+}
+
+// ── 쿠키 헬퍼 함수들 ────────────────────
+function extractCookies(response) {
+  const headers = response.getAllHeaders();
+  const setCookie = headers['Set-Cookie'] || headers['set-cookie'];
+  if (!setCookie) return '';
+  const cookieArr = Array.isArray(setCookie) ? setCookie : [setCookie];
+  return cookieArr.map(c => c.split(';')[0].trim()).join('; ');
+}
+
+function mergeCookies(c1, c2) {
+  if (!c1) return c2 || '';
+  if (!c2) return c1 || '';
+  const map = {};
+  (c1 + '; ' + c2).split(';').forEach(part => {
+    const kv = part.trim();
+    if (!kv) return;
+    const eqIdx = kv.indexOf('=');
+    if (eqIdx < 0) return;
+    const k = kv.substring(0, eqIdx).trim();
+    const v = kv.substring(eqIdx + 1).trim();
+    if (k) map[k] = v;
+  });
+  return Object.entries(map).map(([k,v]) => `${k}=${v}`).join('; ');
+}
+
+// ── 군산 시트만 테스트 ───────────────────
+function testGunsan() {
+  const ss = SpreadsheetApp.getActiveSpreadsheet();
+  const sheet = ss.getSheetByName('군산');
+
+  Logger.log('로그인 시도...');
+  const cookie = login();
+  if (!cookie) { Logger.log('로그인 실패'); return; }
+  Logger.log('로그인 성공');
+
+  // 군산 시트 첫 5개 상품만 테스트
+  let count = 0;
+  const lastRow = sheet.getLastRow();
+  for (let r = 2; r <= lastRow && count < 5; r++) {
+    const name    = String(sheet.getRange(r, NAME_COL).getValue()).trim();
+    const linkUrl = String(sheet.getRange(r, LINK_COL).getValue()).trim();
+    if (!name || name.length < 2 || !linkUrl.startsWith('http')) continue;
+
+    const imgUrl = getProductImage(linkUrl, cookie);
+    Logger.log(`${name} → ${imgUrl || '없음'}`);
+    count++;
+    Utilities.sleep(300);
+  }
+  Browser.msgBox('테스트 완료! 로그 창을 확인하세요');
+}
