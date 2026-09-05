@@ -9,7 +9,7 @@
       localStorage.getItem('catalog_theme') === 'dark' ? 'dark' : 'light');
   } catch(e) {}
 </script>
-<title>(ì£¼)ë§ì¤í° ìí ì¹´íë¡ê·¸</title>
+<title>(주)마스터 상품 카탈로그</title>
 <style>
 :root {
   --bg:#f5f6f8;--bg2:#eef0f4;--panel:#ffffff;--panel2:#f8f9fb;
@@ -237,28 +237,28 @@ body.admin-on .spec-edit-btn{display:block;}
 <body>
 
 <div class="admin-bar" id="adminBar">
-  ð <b>ê´ë¦¬ì ëª¨ë</b> â â ì´ë¯¸ì§ / â ì¤í ë²í¼ì¼ë¡ ìí ì ë³´ë¥¼ ë±ë¡í  ì ìì´ì
-  <button onclick="lockAdmin()">ì ê·¸ê¸°</button>
+  🔓 <b>관리자 모드</b> — ✎ 이미지 / ✎ 스펙 버튼으로 상품 정보를 등록할 수 있어요
+  <button onclick="lockAdmin()">잠그기</button>
 </div>
 
-<button class="theme-toggle" id="themeToggle" aria-label="íë§ ì í">ð</button>
+<button class="theme-toggle" id="themeToggle" aria-label="테마 전환">🌙</button>
 
 <header class="site-header">
   <div class="header-inner">
     <div class="logo">
       <span class="logo-dot"></span>
       <div>
-        <div class="logo-name">(ì£¼)ë§ì¤í° ì íµ ìí ì¹´íë¡ê·¸</div>
-        <div class="logo-sub">ê±°ëì² ì ì© ìí ì¹´íë¡ê·¸</div>
+        <div class="logo-name">(주)마스터 유통 상품 카탈로그</div>
+        <div class="logo-sub">거래처 전용 상품 카탈로그</div>
       </div>
     </div>
     <div class="header-search">
-      <span class="search-ico">ð</span>
-      <input type="search" id="searchInput" placeholder="ìíëª ê²ìâ¦" autocomplete="off">
+      <span class="search-ico">🔍</span>
+      <input type="search" id="searchInput" placeholder="상품명 검색…" autocomplete="off">
     </div>
     <div class="header-stats">
-      <div class="hstat"><div class="v" id="statItems">â</div><div class="k">ì ì²´ ìí</div></div>
-      <div class="hstat"><div class="v" id="statSheets">â</div><div class="k">ì°½ê³  ì</div></div>
+      <div class="hstat"><div class="v" id="statItems">—</div><div class="k">전체 상품</div></div>
+      <div class="hstat"><div class="v" id="statSheets">—</div><div class="k">창고 수</div></div>
     </div>
   </div>
 </header>
@@ -266,22 +266,22 @@ body.admin-on .spec-edit-btn{display:block;}
 <section class="hero">
   <div class="hero-inner">
     <div class="hero-text">
-      <p>ì í¬ë ëí´, ì¸ì², êµ°ì° ë± ì°ì§ì ì°½ê³ ë¥¼ ëê³  ì§ì  ì¶ê³ íê³ ìë <b>(ì£¼)ë§ì¤í°</b>ìëë¤.<br>ìí, ì¬ì ëª¨ë ê°ë¥íìê³  í ê°ë§ ì£¼ë¬¸ ì£¼ìë ë ì´ë¯¸ ì·¨ê¸íìë ìíì´ ìì¼ìë¤ë©´ ë ì ë ´íê² ë°ìë³´ì¸ì.</p>
+      <p>저희는 동해, 인천, 군산 등 산지에 창고를 두고 직접 출고하고있는 <b>(주)마스터</b>입니다.<br>위탁, 사입 모두 가능하시고 한 개만 주문 주셔도 또 이미 취급하시는 상품이 있으시다면 더 저렴하게 받아보세요.</p>
       <div class="hero-badges">
-        <span class="hero-badge">ð­ ì°ì§ ì§ì¶ê³ </span>
-        <span class="hero-badge">ð¦ ìíÂ·ì¬ì ëª¨ë ê°ë¥</span>
-        <span class="hero-badge">1ï¸â£ 1ê° ì£¼ë¬¸ë OK</span>
-        <span class="hero-badge">ð° ê¸°ì¡´ ìí ë ì ë ´íê²</span>
+        <span class="hero-badge">🏭 산지 직출고</span>
+        <span class="hero-badge">📦 위탁·사입 모두 가능</span>
+        <span class="hero-badge">1️⃣ 1개 주문도 OK</span>
+        <span class="hero-badge">💰 기존 상품 더 저렴하게</span>
       </div>
     </div>
     <div class="hero-box">
-      <b>ð¦ í©í¬ì¥ ìë´</b><br>
-      í©ë°°ì¡ì <b>ê°ì ì°½ê³  ìíë¼ë¦¬ë§</b> ê°ë¥í©ëë¤.<br>
-      ìë¡ ë¤ë¥¸ ì°½ê³  ìíì ë°°ì¡ë¹ê° ê°ê° ë¶ê³¼ë©ëë¤.<br><br>
-      <b>ð¬ ê°ê²© ë¬¸ì</b><br>
-      ê³µê¸ê°ë ê±°ëì² ë³ë ë¬¸ìë¡ ìë´ëë¦½ëë¤.<br>
-      <button class="hero-kakao" onclick="copyKakao()">ð¬ ì¹´ì¹´ì¤í¡ solyj96</button>
-      <span class="hero-kakao-hint">ëë¥´ë©´ ìì´ëê° ë³µì¬ë¼ì</span>
+      <b>📦 합포장 안내</b><br>
+      합배송은 <b>같은 창고 상품끼리만</b> 가능합니다.<br>
+      서로 다른 창고 상품은 배송비가 각각 부과됩니다.<br><br>
+      <b>💬 가격 문의</b><br>
+      공급가는 거래처 별도 문의로 안내드립니다.<br>
+      <button class="hero-kakao" onclick="copyKakao()">💬 카카오톡 solyj96</button>
+      <span class="hero-kakao-hint">누르면 아이디가 복사돼요</span>
     </div>
   </div>
 </section>
@@ -290,27 +290,27 @@ body.admin-on .spec-edit-btn{display:block;}
 
 <main class="main-wrap" id="mainWrap">
   <div class="card-grid">
-    <div class="state-box"><div class="spinner"></div><div class="state-title">ìíì ë¶ë¬ì¤ë ì¤ìëë¤</div></div>
+    <div class="state-box"><div class="spinner"></div><div class="state-title">상품을 불러오는 중입니다</div></div>
   </div>
 </main>
 
 <footer class="site-footer">
-  <b>(ì£¼)ë§ì¤í°</b> Â· ê±°ëì² ì ì© ìí ì¹´íë¡ê·¸<br>
-  ê³µê¸ê°ë ë³ë ë¬¸ìë¡ ìë´ëë¦½ëë¤ Â· ê°ê²© ë° ì¬ê³ ë ë³ëë  ì ììµëë¤<br>
+  <b>(주)마스터</b> · 거래처 전용 상품 카탈로그<br>
+  공급가는 별도 문의로 안내드립니다 · 가격 및 재고는 변동될 수 있습니다<br>
   <span id="ftSync"></span><br>
-  <span id="adminLink" onclick="adminClick()">ê´ë¦¬ì</span>
+  <span id="adminLink" onclick="adminClick()">관리자</span>
 </footer>
 
-<a class="inquiry-fab" href="https://open.kakao.com/o/sSucXuLi" target="_blank" rel="noopener" aria-label="ì¹´ì¹´ì¤ ì¤íì±í">
-  <span class="fab-emoji">ð¬</span>
+<a class="inquiry-fab" href="https://open.kakao.com/o/sSucXuLi" target="_blank" rel="noopener" aria-label="카카오 오픈채팅">
+  <span class="fab-emoji">💬</span>
   <span class="fab-text">
-    <span class="fab-main">ê°ê²© ë¬¸ìíê¸°</span>
-    <span class="fab-sub">ì¹´ì¹´ì¤ ì¤íì±í ë°ë¡ê°ê¸°</span>
+    <span class="fab-main">가격 문의하기</span>
+    <span class="fab-sub">카카오 오픈채팅 바로가기</span>
   </span>
 </a>
 
 <div class="lightbox" id="lightbox">
-  <button class="lb-close" id="lbClose">â</button>
+  <button class="lb-close" id="lbClose">✕</button>
   <img id="lbImg" alt="">
 </div>
 
@@ -328,30 +328,30 @@ const KAKAO_ID     = 'solyj96';
 let adminHash = '';
 
 const SHEETS = [
-  {name:'ë¹ì¼ìë¬¼',label:'ë¹ì¼ìë¬¼',daily:true},
-  {name:'ê²½ê¸°',label:'ê²½ê¸°'},{name:'êµ°ì°',label:'êµ°ì°'},
-  {name:'ëí´',label:'ëí´'},{name:'ì¸ì²',label:'ì¸ì²'},
-  {name:'ë§ì§',label:'ë§ì§'},{name:'ì¶©ë¬´',label:'ì¶©ë¬´'},
-  {name:'ìê³ ',label:'ìê³ '},{name:'í¡í¡',label:'í¡í¡'},
-  {name:'í¤í¸',label:'í¤í¸'},{name:'ë¡',label:'ë¡'},
-  {name:'ë¶êµ¬',label:'ë¶êµ¬'},{name:'ë¶ì°',label:'ë¶ì°'},
-  {name:'ì°íêµ­',label:'ì°íêµ­'},{name:'ê¹í¬',label:'ê¹í¬'},
-  {name:'ë¨ë(ì ë¡)',label:'ë¨ëì ë£'},
-  {name:'ë¨ë(ë¬´ë£)',label:'ë¨ëë¬´ë£'},
-  {name:'ë¨ë(ì ë¬¼)',label:'ë¨ëì ë¬¼'},
+  {name:'당일생물',label:'당일생물',daily:true},
+  {name:'경기',label:'경기'},{name:'군산',label:'군산'},
+  {name:'동해',label:'동해'},{name:'인천',label:'인천'},
+  {name:'마진',label:'마진'},{name:'충무',label:'충무'},
+  {name:'생고',label:'생고'},{name:'팡팡',label:'팡팡'},
+  {name:'키트',label:'키트'},{name:'떡',label:'떡'},
+  {name:'북구',label:'북구'},{name:'부산',label:'부산'},
+  {name:'찐한국',label:'찐한국'},{name:'김포',label:'김포'},
+  {name:'단독(유로)',label:'단독유료'},
+  {name:'단독(무료)',label:'단독무료'},
+  {name:'단독(선물)',label:'단독선물'},
 ];
 
-const CAT_EMOJI={ìì°:'ð',ì¶ì°:'ð¥©',ê³¼ì¼:'ð',ì±ì:'ð¥¬',ê¹ì¹:'ð¥¬',ë¡:'ð¡',ê°ì:'ð¢',ê¸°í:'ð¦'};
+const CAT_EMOJI={수산:'🐟',축산:'🥩',과일:'🍑',채소:'🥬',김치:'🥬',떡:'🍡',간식:'🍢',기타:'📦'};
 const CAT_RE=[
-  ['ìì°',/ê°ì¹|ì¤ì§ì´|ìì°|ê²ì¥|ê½ê²|ëê²|í¹í¬ë©|ì¡°ê°|êµ´|íí©|ë¬¸ì´|ëì§|ì£¼ê¾¸ë¯¸|ì¥ì´|ê³ ë±ì´|ê°ìë¯¸|ì ë³µ|ê¼¬ë§|ë°ì§ë½|ë©¸ì¹|í´ì¼|ì±ê²|ê°ë¦¬ë¹|ëªí|í©í|ìê·|ì¼ì¹|ì¡°ê¸°|ì°¸ì¹|ì°ì´|ë°©ì´|ì ì´|ì­ì´|ë³ì´|ì°ë­|ê´ì´|ë³¼ë½|ëªë|ì°½ë|íëª¨|ê°ì¤ì§ì´|íì¹|ì¥í¬|êµ´ë¹|ì |ìë¼|ë°ë|í¼ë°ê¸°|íê²|ê±°ë¶ì|í¸ëê¸°|ë¬¼ê¹|ë¤ì¬ê¸°|ëì¤í|ë©ê²|íì´|ê°¯ê°ì¬|ê²|ë©ë¡/],
-  ['ì¶ì°',/íì°|ë¼ì§|íë|íë¼ì§|ìê³ ê¸°|ì¼ê²¹|ëª©ì´|ì¡±ë°|ë¬ê±|ì¤ë¦¬|ë¶ê³ ê¸°|ê°ë¹|ì ì¡|ë§ì°½|ê³±ì°½|ëì°½|ë±ì¬|ìì¬|ë­|ìë|ëê°ë|ì°ì¡±|ì¬ê³¨|ë©ì¶ë¦¬|ìê°ë¹|ì ì¡/],
-  ['ê³¼ì¼',/ì¬ê³¼|ë³µì­ì|í¬ë|íë¼ë´|ë¸ê¸°|ìë°|ì°¸ì¸|ë©ë¡ |ë§ê³ |ë°ëë|ë¸ë£¨ë² ë¦¬|ìë|ì²´ë¦¬|í¤ì|ë¨ê°|íì|ë ëª¬|ì¤ë ì§|ì²ë|ìëª½/],
-  ['ì±ì',/ê°ì|ìí|ë§ë|ëí|ë²ì¯|ê³ êµ¬ë§|ì¼ì¼|ì¥ìì|í¸ë°|ë°°ì¶|ë¬´|ìì¶/],
-  ['ê¹ì¹',/ê¹ì¹|ê¹ëê¸°|ì´ê°|ì´ë¬´|ëì¹ë¯¸|ì ì|ëì¥|ê³ ì¶ì¥|ëªì´|ì¥ìì°/],
-  ['ë¡',/ë¡|ì°¹ì|ì¡í¸/],
-  ['ê°ì',/ì¿|ê°ì |ëë©´|ìì¤|ì°¸ê¸°ë¦|ê²¬ê³¼|ë°¤|ëë£½ì§|ì§¬ë½|ë¶ëì°ê°|êµ­ë°¥|í´ì¥êµ­|ê²ì¥/],
+  ['수산',/갈치|오징어|새우|게장|꽃게|대게|킹크랩|조개|굴|홍합|문어|낙지|주꾸미|장어|고등어|가자미|전복|꼬막|바지락|멸치|해삼|성게|가리비|명태|황태|아귀|삼치|조기|참치|연어|방어|전어|숭어|병어|우럭|광어|볼락|명란|창난|하모|갑오징어|한치|쥐포|굴비|젓|소라|박대|피데기|홍게|거북손|호래기|물김|다슬기|랍스타|멍게|홍어|갯가재|게|메로/],
+  ['축산',/한우|돼지|한돈|흑돼지|소고기|삼겹|목살|족발|달걀|오리|불고기|갈비|정육|막창|곱창|대창|등심|안심|닭|순대|도가니|우족|사골|메추리|양갈비|제육/],
+  ['과일',/사과|복숭아|포도|한라봉|딸기|수박|참외|멜론|망고|바나나|블루베리|자두|체리|키위|단감|홍시|레몬|오렌지|천도|자몽/],
+  ['채소',/감자|양파|마늘|대파|버섯|고구마|케일|옥수수|호박|배추|무|상추/],
+  ['김치',/김치|깍두기|총각|열무|동치미|절임|된장|고추장|명이|장아찌/],
+  ['떡',/떡|찹쌀|송편/],
+  ['간식',/엿|강정|냉면|소스|참기름|견과|밤|누룽지|짬뽕|부대찌개|국밥|해장국|게장/],
 ];
-function catOf(n){for(const[c,r]of CAT_RE)if(r.test(n))return c;return'ê¸°í';}
+function catOf(n){for(const[c,r]of CAT_RE)if(r.test(n))return c;return'기타';}
 
 const GRADS=[['#e8f4fd','#b3d9f5'],['#fdf0e8','#f5c8a3'],['#edfdf0','#a3f5b3'],
              ['#f8edf5','#e8a3d9'],['#fdfbe8','#f5e8a3'],['#edeff5','#a3b0e8']];
@@ -378,25 +378,25 @@ async function sha256(str){
   return Array.from(new Uint8Array(buf)).map(b=>b.toString(16).padStart(2,'0')).join('');
 }
 
-/* ì¹´ì¹´ì¤í¡ ìì´ë ë³µì¬ */
+/* 카카오톡 아이디 복사 */
 function copyKakao(){
   navigator.clipboard.writeText(KAKAO_ID)
-    .then(()=>showToast('ì¹´ì¹´ì¤í¡ ìì´ë solyj96ì´ ë³µì¬ëì´ì ð¬'))
-    .catch(()=>showToast('solyj96 â ì§ì  ë³µì¬í´ì£¼ì¸ì'));
+    .then(()=>showToast('카카오톡 아이디 solyj96이 복사됐어요 💬'))
+    .catch(()=>showToast('solyj96 — 직접 복사해주세요'));
 }
 
-/* íë§ */
+/* 테마 */
 const THEME_KEY='catalog_theme';
 function applyTheme(t){
   document.documentElement.setAttribute('data-theme',t);
   localStorage.setItem(THEME_KEY,t);
   const btn=$('themeToggle');
-  if(btn)btn.textContent=t==='dark'?'âï¸':'ð';
+  if(btn)btn.textContent=t==='dark'?'☀️':'🌙';
 }
 applyTheme(document.documentElement.getAttribute('data-theme')==='dark'?'dark':'light');
 $('themeToggle').onclick=()=>applyTheme(document.documentElement.getAttribute('data-theme')==='dark'?'light':'dark');
 
-/* ê´ë¦¬ì */
+/* 관리자 */
 const ADMIN_KEY='catalog_admin';
 function isAdmin(){return localStorage.getItem(ADMIN_KEY)==='1';}
 function updateAdminUI(){
@@ -404,19 +404,19 @@ function updateAdminUI(){
   $('adminBar').classList.toggle('on',on);
   document.body.classList.toggle('admin-on',on);
   const lnk=$('adminLink');
-  if(lnk)lnk.textContent=on?'ð ê´ë¦¬ì ëª¨ë (ì ê·¸ê¸°)':'ê´ë¦¬ì';
+  if(lnk)lnk.textContent=on?'🔓 관리자 모드 (잠그기)':'관리자';
 }
 async function adminClick(){
   if(isAdmin()){lockAdmin();return;}
-  const pw=prompt('ê´ë¦¬ì ë¹ë°ë²í¸ë¥¼ ìë ¥íì¸ì');
+  const pw=prompt('관리자 비밀번호를 입력하세요');
   if(pw==null)return;
   const h=await sha256(pw);
-  if(h===adminHash){localStorage.setItem(ADMIN_KEY,'1');showToast('ê´ë¦¬ì ëª¨ëë¡ ì íëì´ì');updateAdminUI();render();}
-  else showToast('ë¹ë°ë²í¸ê° ì¬ë°ë¥´ì§ ììµëë¤');
+  if(h===adminHash){localStorage.setItem(ADMIN_KEY,'1');showToast('관리자 모드로 전환됐어요');updateAdminUI();render();}
+  else showToast('비밀번호가 올바르지 않습니다');
 }
-function lockAdmin(){localStorage.removeItem(ADMIN_KEY);showToast('ì ê°ìµëë¤');updateAdminUI();render();}
+function lockAdmin(){localStorage.removeItem(ADMIN_KEY);showToast('잠갔습니다');updateAdminUI();render();}
 
-/* JSON ë¡ë */
+/* JSON 로드 */
 async function loadJsonFile(path){
   try{
     const res=await fetch(`https://raw.githubusercontent.com/${GH_OWNER}/${GH_REPO}/main/${path}?t=${Date.now()}`,{cache:'no-cache'});
@@ -429,7 +429,7 @@ async function loadJsonFile(path){
 async function getToken(){
   let t=localStorage.getItem(GH_PAT_KEY);
   if(!t){
-    t=prompt('GitHub í í°ì ìë ¥íì¸ì.\n\nâ  github.com â Settings â Developer settings\nâ¡ Fine-grained tokens â Generate new token\nâ¢ Repository access: jin-soll/allproduct ë§ ì í\nâ£ Permissions â Contents: Read and write\nâ¤ ìì±ë í í° ë¶ì¬ë£ê¸°\n\n(ë¸ë¼ì°ì ìë§ ì ì¥)');
+    t=prompt('GitHub 토큰을 입력하세요.\n\n① github.com → Settings → Developer settings\n② Fine-grained tokens → Generate new token\n③ Repository access: jin-soll/allproduct 만 선택\n④ Permissions → Contents: Read and write\n⑤ 생성된 토큰 붙여넣기\n\n(브라우저에만 저장)');
     if(!t)return null;
     t=t.trim();localStorage.setItem(GH_PAT_KEY,t);
   }
@@ -447,73 +447,73 @@ async function commitJson(path,data,msg){
     const content=btoa(unescape(encodeURIComponent(JSON.stringify(data,null,2))));
     const res=await ghPut(api,h,msg,content,sha);
     if(res.ok)return true;
-    if(res.status===401||res.status===403){localStorage.removeItem(GH_PAT_KEY);showToast('í í°ì´ ì í¨íì§ ììì â ë¤ì ìë ¥í´ì£¼ì¸ì');}
-    else{const j=await res.json().catch(()=>({}));showToast(`ì ì¥ ì¤í¨ (${res.status}) ${j.message||''}`);}
+    if(res.status===401||res.status===403){localStorage.removeItem(GH_PAT_KEY);showToast('토큰이 유효하지 않아요 — 다시 입력해주세요');}
+    else{const j=await res.json().catch(()=>({}));showToast(`저장 실패 (${res.status}) ${j.message||''}`);}
     return false;
-  }catch(e){showToast('ì ì¥ ì¤í¨ â ë¤í¸ìí¬ íì¸í´ì£¼ì¸ì');console.error(e);return false;}
+  }catch(e){showToast('저장 실패 — 네트워크 확인해주세요');console.error(e);return false;}
 }
 
-/* ì´ë¯¸ì§ ìì  */
+/* 이미지 수정 */
 function editImage(productName){
   if(!isAdmin())return;
   const key=pkey(productName),current=imgData[key]||'';
-  const choice=confirm(`"${productName}"\n\n[íì¸] â ì´ë¯¸ì§ URL ì§ì  ìë ¥\n[ì·¨ì] â PC íì¼ ì í`);
+  const choice=confirm(`"${productName}"\n\n[확인] → 이미지 URL 직접 입력\n[취소] → PC 파일 선택`);
   if(choice){
-    const newUrl=prompt('ì´ë¯¸ì§ URL ìë ¥\n(ë¹ì°ë©´ ì­ì )',current);
+    const newUrl=prompt('이미지 URL 입력\n(비우면 삭제)',current);
     if(newUrl===null)return;
     const trimmed=newUrl.trim();
     if(trimmed)imgData[key]=trimmed;else delete imgData[key];
-    render();showToast('ì ì¥ ì¤â¦ â³');
-    commitJson(GH_IMG_PATH,imgData,`ê´ë¦¬ì: "${productName}" ì´ë¯¸ì§ ë±ë¡`).then(ok=>{if(ok){render();showToast('ì´ë¯¸ì§ê° ì ì¥ëì´ì â');}});
+    render();showToast('저장 중… ⏳');
+    commitJson(GH_IMG_PATH,imgData,`관리자: "${productName}" 이미지 등록`).then(ok=>{if(ok){render();showToast('이미지가 저장됐어요 ✅');}});
   }else{
     const input=document.createElement('input');
     input.type='file';input.accept='image/*';
     input.onchange=async(e)=>{
       const file=e.target.files[0];if(!file)return;
-      if(file.size>5*1024*1024){showToast('5MB ì´í íì¼ë§ ê°ë¥í´ì');return;}
-      showToast('ìë¡ë ì¤â¦ â³');
+      if(file.size>5*1024*1024){showToast('5MB 이하 파일만 가능해요');return;}
+      showToast('업로드 중… ⏳');
       const b64=await new Promise((res,rej)=>{const r=new FileReader();r.onload=()=>res(r.result.split(',')[1]);r.onerror=rej;r.readAsDataURL(file);});
       const token=await getToken();if(!token)return;
       const h=ghHdr(token);
       const ext=file.name.split('.').pop().toLowerCase()||'jpg';
-      const safe=pkey(productName).replace(/[^a-z0-9ê°-í£]/g,'_').slice(0,60);
+      const safe=pkey(productName).replace(/[^a-z0-9가-힣]/g,'_').slice(0,60);
       const imgPath=`images/${safe}.${ext}`;
       const imgApi=`https://api.github.com/repos/${GH_OWNER}/${GH_REPO}/contents/${imgPath}`;
       const imgSha=await getFileSha(imgApi,h);
-      const imgRes=await ghPut(imgApi,h,`ê´ë¦¬ì: "${productName}" ì´ë¯¸ì§ ìë¡ë`,b64,imgSha);
+      const imgRes=await ghPut(imgApi,h,`관리자: "${productName}" 이미지 업로드`,b64,imgSha);
       if(!imgRes.ok){
-        if(imgRes.status===401||imgRes.status===403){localStorage.removeItem(GH_PAT_KEY);showToast('í í°ì´ ì í¨íì§ ììì');}
-        else{const j=await imgRes.json().catch(()=>({}));showToast(`ìë¡ë ì¤í¨ (${imgRes.status}) ${j.message||''}`);}
+        if(imgRes.status===401||imgRes.status===403){localStorage.removeItem(GH_PAT_KEY);showToast('토큰이 유효하지 않아요');}
+        else{const j=await imgRes.json().catch(()=>({}));showToast(`업로드 실패 (${imgRes.status}) ${j.message||''}`);}
         return;
       }
       imgData[pkey(productName)]=`https://raw.githubusercontent.com/${GH_OWNER}/${GH_REPO}/main/${imgPath}`;
-      const ok=await commitJson(GH_IMG_PATH,imgData,`ê´ë¦¬ì: "${productName}" ì´ë¯¸ì§ ë±ë¡`);
-      if(ok){render();showToast('ì´ë¯¸ì§ê° ì ì¥ëì´ì â');}
+      const ok=await commitJson(GH_IMG_PATH,imgData,`관리자: "${productName}" 이미지 등록`);
+      if(ok){render();showToast('이미지가 저장됐어요 ✅');}
     };
     input.click();
   }
 }
 
-/* ì¤í ìì  */
+/* 스펙 수정 */
 async function editSpec(productName){
   if(!isAdmin())return;
   const key=pkey(productName),current=specData[key]||'';
-  const newSpec=prompt(`"${productName}" ì¤í ìë ¥\n(Enterë¡ ì¤ë°ê¿, ë¹ì°ë©´ ì­ì )`,current);
+  const newSpec=prompt(`"${productName}" 스펙 입력\n(Enter로 줄바꿈, 비우면 삭제)`,current);
   if(newSpec===null)return;
   const trimmed=newSpec.trim();
   if(trimmed)specData[key]=trimmed;else delete specData[key];
-  render();showToast('ì ì¥ ì¤â¦ â³');
-  const ok=await commitJson(GH_SPEC_PATH,specData,`ê´ë¦¬ì: "${productName}" ì¤í ë±ë¡`);
-  if(ok){render();showToast('ì¤íì´ ì ì¥ëì´ì â');}
+  render();showToast('저장 중… ⏳');
+  const ok=await commitJson(GH_SPEC_PATH,specData,`관리자: "${productName}" 스펙 등록`);
+  if(ok){render();showToast('스펙이 저장됐어요 ✅');}
 }
 
-/* ì¸ë¤ì¼ */
+/* 썸네일 */
 function thumbUrl(url){
   if(!url||!/^https?:\/\//.test(url))return null;
   return'https://images.weserv.nl/?url='+encodeURIComponent(url.replace(/^https?:\/\//,''))+'&w=480&h=360&fit=cover&output=webp&q=82';
 }
 
-/* CSV íì */
+/* CSV 파서 */
 function parseCSV(text){
   const rows=[];let row=[],cell='',inQ=false;
   for(let i=0;i<text.length;i++){
@@ -530,45 +530,45 @@ function parseCSV(text){
   return rows;
 }
 
-/* Fetch & íì± */
+/* Fetch & 파싱 */
 async function fetchSheet(name){
   const url=`https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv&sheet=${encodeURIComponent(name)}&t=${Date.now()}`;
   const res=await fetch(url,{cache:'no-cache'});
   if(!res.ok)throw new Error(`HTTP ${res.status}`);
   const rows=parseCSV(await res.text());
   let hi=0;
-  for(let i=0;i<Math.min(rows.length,4);i++){if(rows[i].some(c=>c.includes('ì°½ê³ ëª')||c.includes('ìíëª'))){hi=i;break;}}
+  for(let i=0;i<Math.min(rows.length,4);i++){if(rows[i].some(c=>c.includes('창고명')||c.includes('상품명'))){hi=i;break;}}
   const hdr=rows[hi];
   const ci={
-    wh:hdr.findIndex(c=>c.includes('ì°½ê³ ëª')),name:hdr.findIndex(c=>c.includes('ìíëª')),
-    ship:hdr.findIndex(c=>c.includes('íë°°ë¹')),tax:hdr.findIndex(c=>c.includes('ë©´ê³¼ì¸')),
-    note:hdr.findIndex(c=>c.includes('í¹ì´ì¬í­')),exp:hdr.findIndex(c=>c.includes('ì íµê¸°í')),
+    wh:hdr.findIndex(c=>c.includes('창고명')),name:hdr.findIndex(c=>c.includes('상품명')),
+    ship:hdr.findIndex(c=>c.includes('택배비')),tax:hdr.findIndex(c=>c.includes('면과세')),
+    note:hdr.findIndex(c=>c.includes('특이사항')),exp:hdr.findIndex(c=>c.includes('유통기한')),
   };
   if(ci.wh<0)ci.wh=1;if(ci.name<0)ci.name=2;
   const products=[];
   for(let i=hi+1;i<rows.length;i++){
     const r=rows[i];if(!r||r.length<2)continue;
     const nm=(r[ci.name]||'').replace(/\s+/g,' ').trim();
-    if(!nm||nm.includes('ìíëª')||nm.length<2)continue;
+    if(!nm||nm.includes('상품명')||nm.length<2)continue;
     const wh=(r[ci.wh]||'').trim();
     const shipRaw=(ci.ship>=0?r[ci.ship]:'').trim();
-    const isFree=/ë¬´ë£/.test(shipRaw)||shipRaw==='0';
+    const isFree=/무료/.test(shipRaw)||shipRaw==='0';
     const ship=isFree?0:(parseInt(shipRaw.replace(/[^\d]/g,''),10)||0);
     const tax=(ci.tax>=0?r[ci.tax]:'').trim();
     const note=(ci.note>=0?r[ci.note]:'').trim();
     const exp=(ci.exp>=0?r[ci.exp]:'').trim();
-    const sp=[];if(note&&note!=='-')sp.push(note);if(exp&&exp!=='-')sp.push('ì íµê¸°í '+exp);
-    products.push({wh,name:nm,isFree,ship,tax,spec:sp.join(' Â· '),cat:catOf(nm)});
+    const sp=[];if(note&&note!=='-')sp.push(note);if(exp&&exp!=='-')sp.push('유통기한 '+exp);
+    products.push({wh,name:nm,isFree,ship,tax,spec:sp.join(' · '),cat:catOf(nm)});
   }
   return products;
 }
 function hashList(arr){return arr.map(p=>p.name+'|'+p.wh).join('||');}
 
-/* í­ */
+/* 탭 */
 function buildTabs(){
   const inner=$('tabInner');inner.innerHTML='';
   SHEETS.forEach(s=>{
-    const cnt=loaded.has(s.name)?(allData[s.name]||[]).length:'â¦';
+    const cnt=loaded.has(s.name)?(allData[s.name]||[]).length:'…';
     const btn=document.createElement('button');
     btn.className='tab-btn'+(s.name===activeTab?' active':'');
     btn.innerHTML=(s.daily?'<span class="tab-dot"></span>':'')+esc(s.label)+`<span class="tab-bdg" id="bdg-${esc(s.name)}">${cnt}</span>`;
@@ -591,7 +591,7 @@ async function switchTab(name){
   }
 }
 
-/* ë ëë§ */
+/* 렌더링 */
 function getList(){
   if(searchQ){
     const out=[];
@@ -611,25 +611,25 @@ function render(){
   const{list}=getList();
   const si=SHEETS.find(s=>s.name===activeTab);
   if(!searchQ&&activeTab&&loading.has(activeTab)){
-    wrap.innerHTML=`<div class="card-grid"><div class="state-box"><div class="spinner"></div><div class="state-title">ë¶ë¬ì¤ë ì¤â¦</div></div></div>`;return;
+    wrap.innerHTML=`<div class="card-grid"><div class="state-box"><div class="spinner"></div><div class="state-title">불러오는 중…</div></div></div>`;return;
   }
   const sl=doSort(list);let html='';
   if(searchQ){
-    html+=`<div class="search-banner">ð <b>"${esc(searchQ)}"</b> ê²ì ê²°ê³¼ Â· ${sl.length}ê° <button class="search-clear" onclick="clearSearch()">â ê²ì ì§ì°ê¸°</button></div>`;
+    html+=`<div class="search-banner">🔍 <b>"${esc(searchQ)}"</b> 검색 결과 · ${sl.length}개 <button class="search-clear" onclick="clearSearch()">✕ 검색 지우기</button></div>`;
   }else{
     const freeN=sl.filter(p=>p.isFree).length;
-    html+=`<div class="sec-head"><div class="sec-title">${si&&si.daily?'<span class="daily-chip">ë¹ì¼íì </span>':''}${esc(si?si.label:'')} ì°½ê³ </div><div class="sec-meta"><b>${sl.length}</b>ê° ìí${freeN?` Â· ë¬´ë£ë°°ì¡ <b>${freeN}</b>ê±´`:''}</div></div>
+    html+=`<div class="sec-head"><div class="sec-title">${si&&si.daily?'<span class="daily-chip">당일한정</span>':''}${esc(si?si.label:'')} 창고</div><div class="sec-meta"><b>${sl.length}</b>개 상품${freeN?` · 무료배송 <b>${freeN}</b>건`:''}</div></div>
     <div class="sort-bar">
-      <button class="sort-btn ${sortMode==='sheet'?'on':''}" onclick="setSort('sheet')">ê¸°ë³¸ì</button>
-      <button class="sort-btn ${sortMode==='name'?'on':''}" onclick="setSort('name')">ì´ë¦ì</button>
-      <button class="sort-btn ${sortMode==='free'?'on':''}" onclick="setSort('free')">ë¬´ë£ë°°ì¡ ë¨¼ì </button>
+      <button class="sort-btn ${sortMode==='sheet'?'on':''}" onclick="setSort('sheet')">기본순</button>
+      <button class="sort-btn ${sortMode==='name'?'on':''}" onclick="setSort('name')">이름순</button>
+      <button class="sort-btn ${sortMode==='free'?'on':''}" onclick="setSort('free')">무료배송 먼저</button>
     </div>`;
   }
   html+='<div class="card-grid">';
   if(!sl.length){
     html+=loading.has(activeTab)
-      ?`<div class="state-box"><div class="spinner"></div><div class="state-title">ë¶ë¬ì¤ë ì¤â¦</div></div>`
-      :`<div class="state-box"><div class="state-ico">${searchQ?'ð':'ð¦'}</div><div class="state-title">${searchQ?`"${esc(searchQ)}"ì í´ë¹íë ìíì´ ìì´ì`:'ìíì´ ììµëë¤'}</div></div>`;
+      ?`<div class="state-box"><div class="spinner"></div><div class="state-title">불러오는 중…</div></div>`
+      :`<div class="state-box"><div class="state-ico">${searchQ?'🔍':'📦'}</div><div class="state-title">${searchQ?`"${esc(searchQ)}"에 해당하는 상품이 없어요`:'상품이 없습니다'}</div></div>`;
   }
   sl.forEach(p=>{html+=cardHtml(p);});
   html+='</div>';
@@ -638,7 +638,7 @@ function render(){
 
 function cardHtml(p){
   const label=p._label||(SHEETS.find(s=>s.name===p._sheet)||{}).label||p.wh||'';
-  const emoji=CAT_EMOJI[p.cat||catOf(p.name)]||'ð¦';
+  const emoji=CAT_EMOJI[p.cat||catOf(p.name)]||'📦';
   const savedImg=imgData[pkey(p.name)]||'';
   const thumb=thumbUrl(savedImg);
   let imgHtml=thumb
@@ -649,24 +649,24 @@ function cardHtml(p){
   if(searchQ&&label)tags.push(`<span class="ctag ctag-wh">${esc(label)}</span>`);
   else if(p.wh)tags.push(`<span class="ctag ctag-wh">${esc(p.wh)}</span>`);
   if(p.tax)tags.push(`<span class="ctag ctag-tax">${esc(p.tax)}</span>`);
-  if(p.isFree)tags.push(`<span class="ctag ctag-free">ë¬´ë£ë°°ì¡</span>`);
-  const shipHtml=p.isFree?'<span class="ship-free">ë¬´ë£ë°°ì¡</span>':(p.ship>0?`<span class="ship-paid">${p.ship.toLocaleString()}ì</span>`:'');
+  if(p.isFree)tags.push(`<span class="ctag ctag-free">무료배송</span>`);
+  const shipHtml=p.isFree?'<span class="ship-free">무료배송</span>':(p.ship>0?`<span class="ship-paid">${p.ship.toLocaleString()}원</span>`:'');
   const customSpec=specData[pkey(p.name)]||'';
-  const displaySpec=customSpec;
+  const displaySpec=customSpec||p.spec||'';
   return`<article class="pcard">
     <div class="card-img-wrap">
       ${imgHtml}
       <span class="card-wh-badge">${esc(p.wh||label)}</span>
-      <button class="card-copy" title="ìíëª ë³µì¬" onclick="copyName(event,'${safe}')">ð</button>
-      <button class="img-edit-btn" onclick="editImage('${safe}')">â ì´ë¯¸ì§</button>
+      <button class="card-copy" title="상품명 복사" onclick="copyName(event,'${safe}')">📋</button>
+      <button class="img-edit-btn" onclick="editImage('${safe}')">✎ 이미지</button>
     </div>
     <div class="card-body">
       ${tags.length?`<div class="card-tags">${tags.join('')}</div>`:''}
       <div class="card-name">${esc(p.name)}</div>
       ${displaySpec?`<div class="card-spec${customSpec?' custom':''}">${esc(displaySpec)}</div>`:''}
-      <button class="spec-edit-btn" onclick="editSpec('${safe}')">â ì¤í í¸ì§${customSpec?' â':''}</button>
+      <button class="spec-edit-btn" onclick="editSpec('${safe}')">✎ 스펙 편집${customSpec?' ✅':''}</button>
       <div class="card-foot">
-        <div><span class="price-lbl">ê³µê¸ê°</span><span class="price-ask">ë³ë ë¬¸ì</span></div>
+        <div><span class="price-lbl">공급가</span><span class="price-ask">별도 문의</span></div>
       </div>
     </div>
   </article>`;
@@ -674,7 +674,7 @@ function cardHtml(p){
 
 function renderError(name,err){
   if(activeTab!==name)return;
-  $('mainWrap').innerHTML=`<div class="card-grid"><div class="state-box"><div class="state-ico">â ï¸</div><div class="state-title">ë¶ë¬ì¤ì§ ëª»íìµëë¤</div><div style="font-size:12px;color:var(--ink3);margin-top:4px">${esc(String(err))}</div><button class="retry-btn" onclick="retryTab('${esc(name)}')">ë¤ì ìë</button></div></div>`;
+  $('mainWrap').innerHTML=`<div class="card-grid"><div class="state-box"><div class="state-ico">⚠️</div><div class="state-title">불러오지 못했습니다</div><div style="font-size:12px;color:var(--ink3);margin-top:4px">${esc(String(err))}</div><button class="retry-btn" onclick="retryTab('${esc(name)}')">다시 시도</button></div></div>`;
 }
 
 function updateStats(){
@@ -682,7 +682,7 @@ function updateStats(){
   $('statItems').textContent=t.toLocaleString();$('statSheets').textContent=loaded.size;
 }
 
-/* ìëê°±ì  */
+/* 자동갱신 */
 async function refreshAll(silent=true){
   if(document.hidden)return;
   let changed=false;
@@ -697,8 +697,8 @@ async function refreshAll(silent=true){
   if(changed){
     updateStats();render();
     const now=new Date().toLocaleString('ko-KR',{timeZone:'Asia/Seoul',hour12:false,month:'numeric',day:'numeric',hour:'2-digit',minute:'2-digit'});
-    const ft=$('ftSync');if(ft)ft.textContent='ë§ì§ë§ ê°±ì  '+now;
-    if(!silent)showToast('ìí ì ë³´ê° ê°±ì ëìµëë¤');
+    const ft=$('ftSync');if(ft)ft.textContent='마지막 갱신 '+now;
+    if(!silent)showToast('상품 정보가 갱신됐습니다');
   }
 }
 setInterval(()=>refreshAll(true),AUTO_REFRESH);
@@ -717,7 +717,7 @@ async function loadAll(){
   }
 }
 
-/* ë¼ì´í¸ë°ì¤ */
+/* 라이트박스 */
 document.addEventListener('click',e=>{
   const img=e.target.closest('.card-img');
   if(img){
@@ -734,11 +734,11 @@ function closeLB(){$('lightbox').classList.remove('on');$('lbImg').src='';docume
 
 function setSort(m){sortMode=m;render();}
 function clearSearch(){$('searchInput').value='';searchQ='';render();}
-function copyName(e,name){e.stopPropagation();navigator.clipboard.writeText(name).then(()=>showToast('ìíëªì´ ë³µì¬ëì´ì'));}
+function copyName(e,name){e.stopPropagation();navigator.clipboard.writeText(name).then(()=>showToast('상품명이 복사됐어요'));}
 function retryTab(name){loaded.delete(name);loading.delete(name);switchTab(name);}
 $('searchInput').addEventListener('input',e=>{searchQ=e.target.value.trim().toLowerCase();render();if(searchQ)loadAll();});
 
-/* ì´ê¸°í */
+/* 초기화 */
 (async()=>{
   adminHash=await sha256('yj250430!@');
   [imgData,specData]=await Promise.all([loadJsonFile(GH_IMG_PATH),loadJsonFile(GH_SPEC_PATH)]);
