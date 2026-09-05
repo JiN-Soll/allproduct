@@ -579,7 +579,8 @@ function buildTabs(){
 function updBadge(n){const el=document.getElementById(`bdg-${n}`);if(el)el.textContent=(allData[n]||[]).length;}
 
 async function switchTab(name){
-  activeTab=name;sortMode='sheet';buildTabs();render();
+  activeTab=name;sortMode='sheet';localStorage.setItem('catalog_tab',name);history.replaceState(null,'','?tab='+encodeURIComponent(name));
+buildTabs();render();
   if(!loaded.has(name)&&!loading.has(name)){
     loading.add(name);
     try{
@@ -745,7 +746,8 @@ $('searchInput').addEventListener('input',e=>{searchQ=e.target.value.trim().toLo
   adminHash=await sha256('yj250430!@');
   [imgData,specData]=await Promise.all([loadJsonFile(GH_IMG_PATH),loadJsonFile(GH_SPEC_PATH)]);
   updateAdminUI();
-  activeTab=new URLSearchParams(location.search).get('tab')||localStorage.getItem('catalog_tab')||SHEETS[0].name;buildTabs();loading.add(activeTab);render();
+  activeTab=new URLSearchParams(location.search).get('tab')||localStorage.getItem('catalog_tab')||new URLSearchParams(location.search).get('tab')||localStorage.getItem('catalog_tab')||SHEETS[0].name
+();loading.add(activeTab);render();
   try{
     const data=await fetchSheet(activeTab);
     allData[activeTab]=data;lastHash[activeTab]=hashList(data);
