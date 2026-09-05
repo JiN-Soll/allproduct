@@ -653,7 +653,7 @@ function cardHtml(p){
   if(p.isFree)tags.push(`<span class="ctag ctag-free">무료배송</span>`);
   const shipHtml=p.isFree?'<span class="ship-free">무료배송</span>':(p.ship>0?`<span class="ship-paid">${p.ship.toLocaleString()}원</span>`:'');
   const customSpec=specData[pkey(p.name)]||'';
-  const displaySpec=customSpec||p.spec||'';
+  const displaySpec=customSpec;
   return`<article class="pcard">
     <div class="card-img-wrap">
       ${imgHtml}
