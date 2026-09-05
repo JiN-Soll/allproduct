@@ -745,7 +745,7 @@ $('searchInput').addEventListener('input',e=>{searchQ=e.target.value.trim().toLo
   adminHash=await sha256('yj250430!@');
   [imgData,specData]=await Promise.all([loadJsonFile(GH_IMG_PATH),loadJsonFile(GH_SPEC_PATH)]);
   updateAdminUI();
-  activeTab=SHEETS[0].name;buildTabs();loading.add(activeTab);render();
+  activeTab=new URLSearchParams(location.search).get('tab')||localStorage.getItem('catalog_tab')||SHEETS[0].name;buildTabs();loading.add(activeTab);render();
   try{
     const data=await fetchSheet(activeTab);
     allData[activeTab]=data;lastHash[activeTab]=hashList(data);
