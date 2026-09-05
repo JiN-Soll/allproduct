@@ -652,7 +652,7 @@ function cardHtml(p){
   if(p.isFree)tags.push(`<span class="ctag ctag-free">ë¬´ë£ë°°ì¡</span>`);
   const shipHtml=p.isFree?'<span class="ship-free">ë¬´ë£ë°°ì¡</span>':(p.ship>0?`<span class="ship-paid">${p.ship.toLocaleString()}ì</span>`:'');
   const customSpec=specData[pkey(p.name)]||'';
-  const displaySpec=customSpec||'';
+  const displaySpec=customSpec;
   return`<article class="pcard">
     <div class="card-img-wrap">
       ${imgHtml}
